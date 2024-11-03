@@ -43,7 +43,7 @@ class Sidebar extends HTMLElement {
 
         <a class="menu-header">Projects</a>
         <div class="menu-item">
-            <a href="lights_out.html" class="menu-link">Lights Out</a>
+            <a href="lights_out.html" class="menu-link">Annoying Puzzle</a>
         </div>
 
         <a class="menu-header">Silly Games</a>
