@@ -1,0 +1,31 @@
+@font-face {
+    font-family: 'Splatoon 2';
+    src: url("Splatoon2.otf");
+}
+
+/*--- Basic setup ---*/
+
+html {
+    font-size: 22px;
+    font-family: "Noto Sans Devanagari", sans-serif;
+}
+
+body {
+    background-color: #141414;
+    color: whitesmoke;
+    margin: 0px;
+}
+
+
+
+/*--- Misc ---*/
+
+#footer {
+    color: whitesmoke;
+    position: fixed;
+    bottom: 0;
+    padding-bottom: 20px;
+    height: 30px;
+    width: 100%;
+    text-align: center;
+}
