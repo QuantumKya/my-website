@@ -20,20 +20,22 @@
 <body>
 
     <sidebar-component></sidebar-component>
+
+    <div id="main">
+
+        <img id="clickSandwich" width=400 height=400 src="sandwich_image.png" onclick="Game.earn(1)">
     
-    <br>
+        <p id="NOSdisplay" style="font-size: 200%;"></p>
+        <p id="SPSdisplay" style="font-size: 150%;"></p>
+    
+        <span>
+            <button id="bakeryButton" type="button" onclick="Game.earnBakery(1)">Buy Bakery (15)</button>
+        </span>
+    
+        <p id="NOBdisplay" style="font-size: 100%;"></p>
 
-    <img id="clickSandwich" width=400 height=400 src="sandwich_image.png" onclick="Game.earn(1)">
-
-    <p id="NOSdisplay" style="font-size: 200%;"></p>
-    <p id="SPSdisplay" style="font-size: 150%;"></p>
-
-    <span>
-        <button id="bakeryButton" type="button" onclick="Game.earnBakery(1)">Buy Bakery (15)</button>
-    </span>
-
-    <p id="NOBdisplay" style="font-size: 100%;"></p>
-
+    </div>
+    
     <footer-component></footer-component>
 
 </body>
