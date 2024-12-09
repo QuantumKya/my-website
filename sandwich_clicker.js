@@ -1,12 +1,44 @@
 
 // Variable setup
 
-let numberOfSandwiches = 0;
-let sandwichesPerSecond = 0;
-let bakeryNumber = 0;
+let sandwiches = 0;
+let sandwichRate = 0;
+let bakeries = 0;
 let bakeryPrice = 15;
 
+let owns = {
+    deli: {
+        name: "delis",
+        count: 0
+    },
+
+    bakery: {
+        name: "bakeries",
+        count: 0
+    }
+}
+
+let inventory = {
+    loaf: {
+        name: "loaves of bread",
+        count: 0,
+        rate: 0
+    },
+
+    cheese: {
+        name: "slices of cheese",
+        count: 0,
+        rate: 0
+    },
+}
+
 const expFactor = 1.25;
+
+const sandwichesText = document.getElementById("NOSdisplay");
+const sandwichRateText = document.getElementById("SPSdisplay");
+const bakeriesText = document.getElementById("NOBdisplay");
+const loavesText = document.getElementById("LoavesDisplay");
+const bakeryButton = document.getElementById("bakeryButton");
 
 
 // Method setup
@@ -14,45 +46,41 @@ const expFactor = 1.25;
 const Game = {
 
     update() {
-        document.getElementById("NOSdisplay").innerHTML = ((isInt(numberOfSandwiches)) ? numberOfSandwiches : Math.floor(numberOfSandwiches)).toString() + " sandwiches";
+        inventory.loaf.rate = this.calcSPS();
+        Game.earn(sandwichRate);
+        Game.earnLoaf(inventory.loaf.rate);
 
-        document.getElementById("SPSdisplay").innerHTML = sandwichesPerSecond.toString() + " sandwiches per second";
-        document.getElementById("NOBdisplay").innerHTML = bakeryNumber.toString() + " bakeries";
-        document.getElementById("bakeryButton").innerHTML = "Buy bakery (" + bakeryPrice.toString() + ")";
+        sandwichesText.innerHTML = Math.floor(sandwiches).toString() + " sandwiches";
+
+        sandwichRateText.innerHTML = sandwichRate.toString() + " sandwiches per second";
+        bakeriesText.innerHTML = bakeries.toString() + " bakeries";
+        loavesText.innerHTML = inventory.loaf.count.toString() + " " + inventory.loaf.name;
+
+        bakeryButton.innerHTML = "Buy bakery (" + bakeryPrice.toString() + ")";
     },
 
-    earn(amount) {
-        numberOfSandwiches += amount;
-        this.update();
-    },
+    earn(amount) { sandwiches += amount; },
+    earnLoaf(amount) { inventory.loaf.count += amount; },
+    earnBakery(amount) { owns.bakery.count += amount; },
+    earnSPS(amount) { sandwichRate += amount; },
+    earnBPS(amount) { loafRate += amount; },
 
-    earnBakery(amount) {
-        if (numberOfSandwiches >= bakeryPrice) {
-            numberOfSandwiches -= bakeryPrice;
-            bakeryNumber += amount;
-            this.earnSPS(amount * 0.5);
-            this.priceScale();
-            this.update();
+    buyBakery(amount) {
+        if (sandwiches >= bakeryPrice * amount) {
+            sandwiches -= bakeryPrice * amount;
+            this.earnBakery(amount);
+            bakeryPrice = Math.floor(bakeryPrice * expFactor);
         }
     },
 
-    earnSPS(amount) {
-        sandwichesPerSecond += amount;
-        this.update();
+    calcSPS() {
+        let sps = bakeries * 0.5;
+        return sps;
     },
-
-    priceScale() {
-        bakeryPrice = Math.floor(bakeryPrice * expFactor);
-        this.update();
-    },
-
-    SPSincr() {
-        Game.earn(sandwichesPerSecond);
-    }
 }
 
 function isInt(n) {
     return n % 1 === 0;
 }
 
-setInterval(Game.SPSincr, 1000);
+setInterval(Game.update, 1000);
