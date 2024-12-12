@@ -108,6 +108,7 @@ let t = 0;
 function setPanzer() {
     t++;
     if (t === 6283) t = 0;
-    document.getElementById("panzervier").style.transform = `translateY(${200*Math.sin(0.001*t)}px)`;
+    document.getElementById("panzervier").style.transform = `translateY(${150*Math.sin(0.01*t)}px)`;
+    document.getElementById("panzervier").style.transform += `translateX(${200 + 150*Math.cos(0.01*t)}px)`;
 }
 setInterval(setPanzer, 1000 / FPS);
