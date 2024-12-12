@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="../main.css" type="text/css">
+
+    <script src="https://kit.fontawesome.com/332620eb80.js" crossorigin="anonymous"></script>
+
+    <script src="../sidebar.js"></script>
+    <script src="../header.js"></script> <!-- Header Import -->
+
+    <link rel="stylesheet" href="../sidebar.css" type="text/css">
+
+    <title>Sandwich Clicker</title>
+
+
+    <script src="sandwich_clicker.js" defer></script>
+</head>
+<body>
+
+    <sidebar-component></sidebar-component>
+
+    <div id="main">
+
+        <img id="clickSandwich" width=400 height=400 src="sandwich_image.png" onclick="Game.earn(1)">
+    
+        <img id="panzervier" width="200" height="100" src="panzer.jpeg">
+        
+        <p id="NOSdisplay" style="font-size: 200%;">0</p>
+        <p id="SPSdisplay" style="font-size: 150%;">0</p>
+        <p id="LoavesDisplay" style="font-size: 150%;">0</p>
+    
+        <span>
+            <button id="bakeryButton" type="button" onclick="Game.buyBakery(1)">Buy Bakery (15)</button>
+        </span>
+    
+        <p id="NOBdisplay" style="font-size: 100%;"></p>
+
+        <span>
+            <button id="deliButton" type="button" onclick="Game.buyDeli(1)">Buy Bakery (15)</button>
+        </span>
+    
+        <p id="DeliDisplay" style="font-size: 100%;"></p>
+
+    </div>
+    
+    <footer-component></footer-component>
+
+</body>
+</html>
