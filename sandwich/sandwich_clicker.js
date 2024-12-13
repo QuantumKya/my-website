@@ -105,10 +105,10 @@ setInterval(upS, 1000 / FPS);
 setInterval(upR, 1000 / FPS);
 
 let t = 0;
-function setPanzer() {
+function setKF51() {
     t++;
     if (t === 6283) t = 0;
-    document.getElementById("panzervier").style.transform = `translateY(${150*Math.sin(0.01*t)}px)`;
-    document.getElementById("panzervier").style.transform += `translateX(${200 + 150*Math.cos(0.01*t)}px)`;
+    document.getElementById("kf51").style.transform += `translateY(${150*Math.sin(0.01*t)}px)`;
+    document.getElementById("kf51").style.transform += `translateX(${200 + 150*Math.cos(0.01*t)}px)`;
 }
-setInterval(setPanzer, 1000 / FPS);
+setInterval(setKF51, 1000 / FPS);
