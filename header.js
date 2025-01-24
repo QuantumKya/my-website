@@ -53,7 +53,7 @@ class Sidebar extends HTMLElement {
 
         <!-- <a class="menu-header">Other</a>
         <div class="menu-item">
-            <a href="gallery.html" class="menu-link">Cool PNGs</a>
+            <a href="hindi-romanization.html" class="menu-link">Hindi reading tutorial</a>
         </div> -->
 
     </div>
