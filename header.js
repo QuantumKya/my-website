@@ -51,10 +51,10 @@ class Sidebar extends HTMLElement {
             <a href="sandwich/main.html" class="menu-link">Sandwich Clicker</a>
         </div>
 
-        <!-- <a class="menu-header">Other</a>
+        <a class="menu-header">Other</a>
         <div class="menu-item">
             <a href="hindi-romanization.html" class="menu-link">Hindi reading tutorial</a>
-        </div> -->
+        </div>
 
     </div>
 
