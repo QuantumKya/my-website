@@ -23,8 +23,11 @@ class Imports extends HTMLElement {
 }
 
 class Sidebar extends HTMLElement {
-    constructor() {
+    dir = "";
+
+    constructor(dirin) {
         super();
+        dir = dirin;
     }
 
     connectedCallback() {
@@ -39,22 +42,23 @@ class Sidebar extends HTMLElement {
 
         <span class="close-button" onclick="closeSidebar()"><i class="fa-solid fa-xmark"></i></span>
 
-        <a href="index.html" class="menu-header">Home</a>
+        <a href="${dir}index.html" class="menu-header">Home</a>
 
         <a class="menu-header">Projects</a>
         <div class="menu-item">
-            <a href="lights_out.html" class="menu-link">Annoying Puzzle</a>
+            <a href="${dir}lights_out.html" class="menu-link">Annoying Puzzle</a>
         </div>
 
         <a class="menu-header">Silly Games</a>
         <div class="menu-item">
-            <a href="sandwich/main.html" class="menu-link">Sandwich Clicker</a>
+            <a href="${dir}sandwich/main.html" class="menu-link">Sandwich Clicker</a>
         </div>
 
+        <!--
         <a class="menu-header">Other</a>
         <div class="menu-item">
-            <a href="hindi-romanization.html" class="menu-link">Hindi reading tutorial</a>
         </div>
+        -->
 
     </div>
 
@@ -78,5 +82,6 @@ class Footer extends HTMLElement {
 }
 
 customElements.define("import-component", Imports);
-customElements.define("sidebar-component", Sidebar);
+customElements.define("sidebar-component", Sidebar(""));
+customElements.define("sidebar-sub-component", Sidebar("../"));
 customElements.define("footer-component", Footer);
