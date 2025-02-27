@@ -23,11 +23,8 @@ class Imports extends HTMLElement {
 }
 
 class Sidebar extends HTMLElement {
-    dir = "";
-
     constructor(dirin) {
         super();
-        dir = dirin;
     }
 
     connectedCallback() {
@@ -67,11 +64,8 @@ class Sidebar extends HTMLElement {
     }
 }
 class SidebarSub extends HTMLElement {
-    dir = "";
-
-    constructor(dirin) {
+    constructor() {
         super();
-        dir = dirin;
     }
 
     connectedCallback() {
