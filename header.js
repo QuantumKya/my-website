@@ -42,16 +42,60 @@ class Sidebar extends HTMLElement {
 
         <span class="close-button" onclick="closeSidebar()"><i class="fa-solid fa-xmark"></i></span>
 
-        <a href="${dir}index.html" class="menu-header">Home</a>
+        <a href="index.html" class="menu-header">Home</a>
 
         <a class="menu-header">Projects</a>
         <div class="menu-item">
-            <a href="${dir}lights_out.html" class="menu-link">Annoying Puzzle</a>
+            <a href="lights_out.html" class="menu-link">Annoying Puzzle</a>
         </div>
 
         <a class="menu-header">Silly Games</a>
         <div class="menu-item">
-            <a href="${dir}sandwich/main.html" class="menu-link">Sandwich Clicker</a>
+            <a href="sandwich/main.html" class="menu-link">Sandwich Clicker</a>
+        </div>
+
+        <!--
+        <a class="menu-header">Other</a>
+        <div class="menu-item">
+        </div>
+        -->
+
+    </div>
+
+</div>
+        `;
+    }
+}
+class SidebarSub extends HTMLElement {
+    dir = "";
+
+    constructor(dirin) {
+        super();
+        dir = dirin;
+    }
+
+    connectedCallback() {
+        this.innerHTML = `
+<div class="sidebar">
+    
+    <span id="stack-conduit" onclick="openSidebar()">
+        <i class="fa-solid fa-bars"></i>
+    </span>
+
+    <div class="menu-items" id="stack-menu">
+
+        <span class="close-button" onclick="closeSidebar()"><i class="fa-solid fa-xmark"></i></span>
+
+        <a href="../index.html" class="menu-header">Home</a>
+
+        <a class="menu-header">Projects</a>
+        <div class="menu-item">
+            <a href="../lights_out.html" class="menu-link">Annoying Puzzle</a>
+        </div>
+
+        <a class="menu-header">Silly Games</a>
+        <div class="menu-item">
+            <a href="../sandwich/main.html" class="menu-link">Sandwich Clicker</a>
         </div>
 
         <!--
@@ -82,6 +126,6 @@ class Footer extends HTMLElement {
 }
 
 customElements.define("import-component", Imports);
-customElements.define("sidebar-component", Sidebar(""));
-customElements.define("sidebar-sub-component", Sidebar("../"));
+customElements.define("sidebar-component", Sidebar);
+customElements.define("sidebar-sub-component", SidebarSub);
 customElements.define("footer-component", Footer);
