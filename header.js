@@ -49,14 +49,13 @@ class Sidebar extends HTMLElement {
         <a class="menu-header">Silly Games</a>
         <div class="menu-item">
             <a href="sandwich/main.html" class="menu-link">Sandwich Clicker</a>
+            <a href="platformer/index.html" class="menu-link">Platformer</a>
         </div>
 
-        <!--
         <a class="menu-header">Other</a>
-            <a href="multiplayer/app/index.html" class="menu-link">Rice Nouveau</a>
+            <!-- <a href="multiplayer/app/index.html" class="menu-link">Rice Nouveau</a> -->
         <div class="menu-item">
         </div>
-        -->
 
     </div>
 
@@ -91,14 +90,13 @@ class SidebarSub extends HTMLElement {
         <a class="menu-header">Silly Games</a>
         <div class="menu-item">
             <a href="../sandwich/main.html" class="menu-link">Sandwich Clicker</a>
+            <a href="../platformer/index.html" class="menu-link">Platformer</a>
         </div>
-
-        <!--
+        
         <a class="menu-header">Other</a>
-            <a href="../multiplayer/app/index.html" class="menu-link">Rice Nouveau</a>
+            <!-- <a href="../multiplayer/app/index.html" class="menu-link">Rice Nouveau</a> -->
         <div class="menu-item">
         </div>
-        -->
 
     </div>
 
