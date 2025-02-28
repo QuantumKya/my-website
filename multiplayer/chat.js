@@ -1,4 +1,4 @@
-const ws = new WebSocket('ws://your-websocket-server-address'); // Replace with your WebSocket server address
+const ws = new WebSocket('ws://http://localhost:8080/'); // Replace with your WebSocket server address
 const messagesList = document.getElementById('messages');
 const messageInput = document.getElementById('messageInput');
 const sendButton = document.getElementById('sendButton');
