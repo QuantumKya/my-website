@@ -1,0 +1,11 @@
+html {
+    background-color: #333;
+    color: whitesmoke;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#textbox {
+    position: absolute;
+    left: 50px;
+    top: calc(100vh * 0.8);
+}

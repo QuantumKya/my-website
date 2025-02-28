@@ -53,6 +53,7 @@ class Sidebar extends HTMLElement {
 
         <!--
         <a class="menu-header">Other</a>
+            <a href="multiplayer/app/index.html" class="menu-link">Rice Nouveau</a>
         <div class="menu-item">
         </div>
         -->
@@ -94,6 +95,7 @@ class SidebarSub extends HTMLElement {
 
         <!--
         <a class="menu-header">Other</a>
+            <a href="../multiplayer/app/index.html" class="menu-link">Rice Nouveau</a>
         <div class="menu-item">
         </div>
         -->
