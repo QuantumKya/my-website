@@ -92,7 +92,7 @@ class Player {
     term_vel: number = 7;
     gravity: number = 1.4;
 
-    speed: nummber = 5;
+    speed: number = 5;
 
     constructor(pos: Vector2, indim: Vector2) {
         this.position = pos;
@@ -124,8 +124,8 @@ class Player {
     private InitMove() {
         document.addEventListener("keydown", (event) => {
             this.controlVel.x = 0;
-            if (event.code == "ArrowRight") this.controlVel.x += speed;
-            if (event.code == "ArrowLeft") this.controlVel.x -= speed;
+            if (event.code == "ArrowRight") this.controlVel.x += this.speed;
+            if (event.code == "ArrowLeft") this.controlVel.x -= this.speed;
         });
     }
 }
