@@ -21,7 +21,7 @@ async function getChatData() {
 while (true) {
     const currentChat = getChatData();
     chatDisplayEl.innerHTML = '';
-    for (x of currentChat) {
+    for (x of JSON.parse(currentChat)) {
         let newL = document.createElement('li');
         newL.innerHTML = `${x["sender"]}: ${x["message"]}`;
         chatDisplayEl.append(newL);
