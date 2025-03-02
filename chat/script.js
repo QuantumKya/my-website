@@ -8,7 +8,7 @@ async function getChatData() {
     })
     .catch(error => console.error("Error: ", error));
 
-    return dataIn;
+    return JSON.parse(dataIn);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     while (true) {
         const currentChat = getChatData();
         chatDisplayEl.innerHTML = '';
-        for (x of JSON.parse(currentChat)) {
+        for (x of currentChat) {
             let newL = document.createElement('li');
             newL.innerHTML = `${x["sender"]}: ${x["message"]}`;
             chatDisplayEl.append(newL);
