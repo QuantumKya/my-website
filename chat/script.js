@@ -3,16 +3,19 @@ const messageFormEl = document.getElementById('textbox');
 const messageInputEl = document.getElementById('message-box');
 const messageSendEl = document.getElementById('send-button');
 
-const url = "https://qk-vercel-fastapi.vercel.app/sent";
+const url = "https://qk-vercel-fastapi.vercel.app/sent/";
 
 async function getChatData() {
-    const datagot = await fetch(url);
-    if (!datagot.ok) throw new Error(`Data did not get gotten correctly.\nResponse says: ${datagot.status}`);
+    let dataIn;
+    fetch(url)
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+        dataIn = data;
+    })
+    .catch(error => console.error("Error: ", error));
 
-
-    const json = await datagot.json();
-    console.log(json);
-    return json;
+    return dataIn;
 }
 
 while (true) {
