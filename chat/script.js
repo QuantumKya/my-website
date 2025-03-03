@@ -1,14 +1,11 @@
-async function getChatData() {
+async function getChatData(url) {
     let dataIn;
     fetch(url)
     .then(res => res.json())
-    .then(data => {
-        console.log(data);
-        dataIn = data;
-    })
-    .catch(error => console.error("Error: ", error));
+    .then(data => console.log(data))
+    .catch(error => console.error(error));
 
-    return JSON.parse(dataIn);
+    return dataIn;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -17,15 +14,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageInputEl = document.getElementById('message-box');
     const messageSendEl = document.getElementById('send-button');
 
-    const url = "https://qk-vercel-fastapi.vercel.app/sent/";
+    const targeturl = "https://qk-vercel-fastapi.vercel.app/sent/";
 
+    getChatData(targeturl);
+
+    /*
     while (true) {
-        const currentChat = getChatData();
+        const currentChat = getChatData(targeturl);
+        console.log(currentChat);
         chatDisplayEl.innerHTML = '';
-        for (x of currentChat) {
+        for (x of JSON.parse(currentChat)) {
             let newL = document.createElement('li');
             newL.innerHTML = `${x["sender"]}: ${x["message"]}`;
             chatDisplayEl.append(newL);
         }
     }
+    */
 });
