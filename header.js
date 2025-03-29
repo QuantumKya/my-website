@@ -44,6 +44,7 @@ class Sidebar extends HTMLElement {
         <a class="menu-header">Projects</a>
         <div class="menu-item">
             <a href="lights_out.html" class="menu-link">Annoying Puzzle</a>
+            <a href="slopefield/index.html" class="menu-link">DE Slope Fields</a>
         </div>
 
         <a class="menu-header">Silly Games</a>
@@ -84,17 +85,17 @@ class SidebarSub extends HTMLElement {
         <a class="menu-header">Projects</a>
         <div class="menu-item">
             <a href="../lights_out.html" class="menu-link">Annoying Puzzle</a>
+            <a href="../slopefield/index.html" class="menu-link">DE Slope Fields</a>
         </div>
 
         <a class="menu-header">Silly Games</a>
         <div class="menu-item">
             <a href="../sandwich/main.html" class="menu-link">Sandwich Clicker</a>
-            <a href="../platformer/index.html" class="menu-link">Platformer</a>
         </div>
         
-        <a class="menu-header">Other</a>
-            <!-- <a href="../multiplayer/app/index.html" class="menu-link">Rice Nouveau</a> -->
-        <div class="menu-item">
+        <!-- <a class="menu-header">Other</a>
+            <a href="../multiplayer/app/index.html" class="menu-link">Rice Nouveau</a>
+        <div class="menu-item"> -->
         </div>
 
     </div>
