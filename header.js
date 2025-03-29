@@ -112,7 +112,7 @@ class Footer extends HTMLElement {
     connectedCallback() {
         this.innerHTML = `
     <div id="footer">
-        <p>me 2024</p>
+        <p>© me 2024</p>
     </div>
         `;
     }
