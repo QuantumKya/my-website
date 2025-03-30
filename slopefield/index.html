@@ -53,15 +53,8 @@
             display: block;
             border: 0.25rem solid;
             width: fit-content;
-        }
-
-        .update-block * {
             padding-right: 20px;
             padding-left: 20px;
-        }
-
-        .update-block p {
-            margin-bottom: 20px;
         }
 
         #update-list {
@@ -90,13 +83,10 @@
             position: relative;
             display: block;
             border: 0.25rem solid;
+            padding-left: 20px;
+            padding-right: 20px;
             width: fit-content;
             left: -30px;
-        }
-
-        .info-block * {
-            padding-right: 20px;
-            padding-left: 20px;
         }
 
         #wasm {
@@ -245,7 +235,7 @@
         <div id="update-list">
             <span class="update-block" id="update1">
                 <h2>Update 1.0.1 Changes</h2>
-                <p>Now allows using <i>e</i>!</p>
+                <p>Now allows usage of Euler's constant <i>e</i>!</p>
                 <p>Made flowing lines longer to show more data!</p>
             </span>
             <div class="line" style="height: 50px;">
@@ -254,9 +244,9 @@
             </div>
             <span class="update-block" id="update2">
                 <h2>Update 1.0.0 Changes</h2>
-                <p>Made the program!</p>
-                <p>compiled it to WebAssembly,</p>
-                <p>Made this page.</p>
+                <p>I made this program!</p>
+                <p>compiled to WebAssembly,</p>
+                <p>Put it in this page.</p>
             </span>
             <div class="line" style="height: 20px;">
                 <div></div>
@@ -273,6 +263,8 @@
             <br>
             <p>As of v1.0.1, the number e can be used.</p>
 
+            <hr style="border: 3px solid white;">
+
             <h3>Allowed Functions</h3>
             <p>ordinary trig functions:</p>
             <p style="font-family: monospace; font-size: 80%;">sin, cos, tan</p>
@@ -282,6 +274,12 @@
             <p style="font-family: monospace; font-size: 80%;">asin, acos, atan</p>
             <p>exponential functions and natural logarithm:</p>
             <p style="font-family: monospace; font-size: 80%;">e.g. 2^x, e^x, log(x)</p>
+
+            <hr style="border: 3px solid white;">
+
+            <h4>I used the <i>fparser</i> library for user input.</h4>
+            <h4>Thank you to its developers!</h4>
+            <p>http://warp.povusers.org/FunctionParser/fparser.html</p>
         </span>
 
         <!--
