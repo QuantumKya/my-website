@@ -31,11 +31,11 @@ class Sidebar extends HTMLElement {
         this.innerHTML = `
 <div class="sidebar">
     
-    <span id="stack-conduit" onclick="openSidebar()">
+    <span id="stack-conduit" onclick="openSidebar()" style="z-index: 999;">
         <i class="fa-solid fa-bars"></i>
     </span>
 
-    <div class="menu-items" id="stack-menu">
+    <div class="menu-items" id="stack-menu" style="z-index: 1000;">
 
         <span class="close-button" onclick="closeSidebar()"><i class="fa-solid fa-xmark"></i></span>
 
@@ -72,11 +72,11 @@ class SidebarSub extends HTMLElement {
         this.innerHTML = `
 <div class="sidebar">
     
-    <span id="stack-conduit" onclick="openSidebar()">
+    <span id="stack-conduit" onclick="openSidebar()" style="z-index: 999;">
         <i class="fa-solid fa-bars"></i>
     </span>
 
-    <div class="menu-items" id="stack-menu">
+    <div class="menu-items" id="stack-menu" style="z-index: 1000;">
 
         <span class="close-button" onclick="closeSidebar()"><i class="fa-solid fa-xmark"></i></span>
 
