@@ -23,7 +23,7 @@
         #main {
             position: absolute;
             top: 100px;
-            left: -200px;
+            left: 0px;
             width: 100%;
         }
 
@@ -38,19 +38,28 @@
         #ptitle {
             position: absolute;
             top: 27.5px;
-            right: 8vw;
+            left: calc(50vw + 340px);
             width: 100%;
-            text-align: right;
+            text-align: left;
         }
 
         #discordspan {
-            position: absolute;
-            left: 230px;
+            position: relative;
+            left: 180px;
             text-align: left;
+        }
+
+        #canvas {
+            position: relative;
+            left: -200px;
+        }
+
+        #update-block {
+
         }
     </style>
 
-    <script src="index.js" defer></script>
+    <script src="localcode.js" defer></script>
     <style>
         body {
             font-family: arial;
@@ -122,87 +131,94 @@
     <sidebar-sub-component></sidebar-sub-component>
 
     <span>
-        <h1 id="htitle">Slope Field Visualisation v1.0</h1>
-        <p id="ptitle">by Rohan V-F a.k.a QuantumKya</p>
+        <h1 id="htitle">Slope Field Visualisation v1.0.1</h1>
+        <p id="ptitle">by QuantumKya</p>
     </span>
 
     <div id="main">
-        <div class=spinner id=spinner></div>
-        <div class=emscripten id=status>Downloading...</div>
-        <div class=emscripten><progress hidden id=progress max=100 value=0></progress></div>
-        <div class=emscripten_border><canvas class=emscripten id=canvas oncontextmenu=event.preventDefault() tabindex=-1></canvas></div>
-        <script>
-                var statusElement = document.getElementById("status"),
-                progressElement = document.getElementById("progress"),
-                spinnerElement = document.getElementById("spinner"),
-                canvasElement = document.getElementById("canvas"),
-                outputElement = document.getElementById("output");
-                
-            outputElement && (outputElement.value = ""),
-            canvasElement.addEventListener(
-                "webglcontextlost",
-                (e) => {
-                alert("WebGL context lost. You will need to reload the page."),
-                    e.preventDefault();
-                },
-                !1
-            );
-            var Module = {
-            print(...e) {
-                if ((console.log(...e), outputElement)) {
-                var t = e.join(" ");
-                (outputElement.value += t + "\n"),
-                    (outputElement.scrollTop = outputElement.scrollHeight);
-                }
-            },
-            canvas: canvasElement,
-            setStatus(e) {
-                if (
-                ((Module.setStatus.last ??= { time: Date.now(), text: "" }),
-                e !== Module.setStatus.last.text)
-                ) {
-                var t = e.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/),
-                    n = Date.now();
-                (t && n - Module.setStatus.last.time < 30) ||
-                    ((Module.setStatus.last.time = n),
-                    (Module.setStatus.last.text = e),
-                    t
-                    ? ((e = t[1]),
-                        (progressElement.value = 100 * parseInt(t[2])),
-                        (progressElement.max = 100 * parseInt(t[4])),
-                        (progressElement.hidden = !1),
-                        (spinnerElement.hidden = !1))
-                    : ((progressElement.value = null),
-                        (progressElement.max = null),
-                        (progressElement.hidden = !0),
-                        e || (spinnerElement.style.display = "none")),
-                    (statusElement.innerHTML = e));
-                }
-            },
-            totalDependencies: 0,
-            monitorRunDependencies(e) {
-                (this.totalDependencies = Math.max(this.totalDependencies, e)),
-                Module.setStatus(
-                    e
-                    ? "Preparing... (" +
-                        (this.totalDependencies - e) +
-                        "/" +
-                        this.totalDependencies +
-                        ")"
-                    : "All downloads complete."
+        <div id="wasm">
+            <div class=spinner id=spinner></div>
+            <div class=emscripten id=status>Downloading...</div>
+            <div class=emscripten><progress hidden id=progress max=100 value=0></progress></div>
+            <canvas class=emscripten id="canvas" oncontextmenu=event.preventDefault() tabindex=-1></canvas>
+            <script>
+                    var statusElement = document.getElementById("status"),
+                    progressElement = document.getElementById("progress"),
+                    spinnerElement = document.getElementById("spinner"),
+                    canvasElement = document.getElementById("canvas"),
+                    outputElement = document.getElementById("output");
+                    
+                outputElement && (outputElement.value = ""),
+                canvasElement.addEventListener(
+                    "webglcontextlost",
+                    (e) => {
+                    alert("WebGL context lost. You will need to reload the page."),
+                        e.preventDefault();
+                    },
+                    !1
                 );
-            },
-            };
-            Module.setStatus("Downloading..."),
-            (window.onerror = (e) => {
-                Module.setStatus("Exception thrown, see JavaScript console"),
-                (spinnerElement.style.display = "none"),
-                (Module.setStatus = (e) => {
-                    e && console.error("[post-exception status] " + e);
+                var Module = {
+                print(...e) {
+                    if ((console.log(...e), outputElement)) {
+                    var t = e.join(" ");
+                    (outputElement.value += t + "\n"),
+                        (outputElement.scrollTop = outputElement.scrollHeight);
+                    }
+                },
+                canvas: canvasElement,
+                setStatus(e) {
+                    if (
+                    ((Module.setStatus.last ??= { time: Date.now(), text: "" }),
+                    e !== Module.setStatus.last.text)
+                    ) {
+                    var t = e.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/),
+                        n = Date.now();
+                    (t && n - Module.setStatus.last.time < 30) ||
+                        ((Module.setStatus.last.time = n),
+                        (Module.setStatus.last.text = e),
+                        t
+                        ? ((e = t[1]),
+                            (progressElement.value = 100 * parseInt(t[2])),
+                            (progressElement.max = 100 * parseInt(t[4])),
+                            (progressElement.hidden = !1),
+                            (spinnerElement.hidden = !1))
+                        : ((progressElement.value = null),
+                            (progressElement.max = null),
+                            (progressElement.hidden = !0),
+                            e || (spinnerElement.style.display = "none")),
+                        (statusElement.innerHTML = e));
+                    }
+                },
+                totalDependencies: 0,
+                monitorRunDependencies(e) {
+                    (this.totalDependencies = Math.max(this.totalDependencies, e)),
+                    Module.setStatus(
+                        e
+                        ? "Preparing... (" +
+                            (this.totalDependencies - e) +
+                            "/" +
+                            this.totalDependencies +
+                            ")"
+                        : "All downloads complete."
+                    );
+                },
+                };
+                Module.setStatus("Downloading..."),
+                (window.onerror = (e) => {
+                    Module.setStatus("Exception thrown, see JavaScript console"),
+                    (spinnerElement.style.display = "none"),
+                    (Module.setStatus = (e) => {
+                        e && console.error("[post-exception status] " + e);
+                    });
                 });
-            });
-        </script>
-        <script async src=bigthing.js></script>
+            </script>
+            <script async src=index.js></script>
+        </div>
+
+        <span id="update-block">
+            <h2>Update 1.0.1 Changes</h2>
+
+        </span>
 
         <span id="discordspan">
             <h3>Have suggestions for features? Contact me on my Discord server!</h3>
@@ -218,3 +234,7 @@
 
 </body>
 </html>
+
+<!--
+em++ main.cpp fparser/fparser.cc fparser/fpoptimizer.cc -I C:/raylib/raylib/src C:/raylib/raylib/src/libraylib.a -sASYNCIFY -sUSE_GLFW=3 -Os -o index.html
+-->
