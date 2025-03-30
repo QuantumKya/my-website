@@ -49,12 +49,44 @@
             text-align: left;
         }
 
-        #canvas {
-            position: relative;
-            left: -200px;
+        .update-block {
+            display: block;
+            border: 0.25rem solid;
+            width: fit-content;
         }
 
-        #update-block {
+        .update-block * {
+            padding-right: 20px;
+            padding-left: 20px;
+        }
+
+        .update-block p {
+            margin-bottom: 20px;
+        }
+
+        #update-list {
+            position: absolute;
+            left: 700px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        #update-list .line {
+            border-left: 0.25rem solid;
+            align-content: start;
+            font-size: 75%;
+            vertical-align: text-top;
+        }
+
+        #update-list .line div {
+            display: inline-block;
+            border: 2px solid;
+            width: 2px;
+            height: 0px;
+        }
+
+        .info-block {
             position: relative;
             display: block;
             border: 0.25rem solid;
@@ -62,42 +94,19 @@
             left: -30px;
         }
 
-        #update-block * {
+        .info-block * {
             padding-right: 20px;
             padding-left: 20px;
         }
 
-        #update-block p {
-            margin-bottom: 20px;
+        #wasm {
+            position: relative;
+            left: -30px;
         }
     </style>
 
     <script src="localcode.js" defer></script>
     <style>
-        body {
-            font-family: arial;
-            margin: 0;
-            padding: none
-        }
-
-        .emscripten {
-            padding-right: 0;
-            margin-left: auto;
-            margin-right: auto;
-            display: block
-        }
-
-        div.emscripten {
-            text-align: center
-        }
-
-        #emscripten_logo {
-            display: inline-block;
-            margin: 0;
-            padding: 6px;
-            width: 265px
-        }
-
         @-webkit-keyframes rotation {
             from {
                 -webkit-transform: rotate(0)
@@ -149,6 +158,11 @@
     </span>
 
     <div id="main">
+        <div style="display: list-item; position: absolute; left: calc(50vw + 475px); z-index: 100; margin-right: 50px;">
+            <p>Scroll further down to see information about updates and how to use!</p>
+            <p>BTW, just fixed an error in which the line flowing from the mouse would use the <i>completely wrong y-values</i>!</p>
+        </div>
+
         <div id="wasm">
             <div class=spinner id=spinner></div>
             <div class=emscripten id=status>Downloading...</div>
@@ -228,13 +242,29 @@
             <script async src=index.js></script>
         </div>
 
-        <span id="update-block">
-            <h2>Update 1.0.1 Changes</h2>
-            <p>Now allows using <i>e</i>!</p>
-            <p>Made flowing lines longer to show more data!</p>
-        </span>
+        <div id="update-list">
+            <span class="update-block" id="update1">
+                <h2>Update 1.0.1 Changes</h2>
+                <p>Now allows using <i>e</i>!</p>
+                <p>Made flowing lines longer to show more data!</p>
+            </span>
+            <div class="line" style="height: 50px;">
+                <div></div>
+                <i>3/29/25</i>
+            </div>
+            <span class="update-block" id="update2">
+                <h2>Update 1.0.0 Changes</h2>
+                <p>Made the program!</p>
+                <p>compiled it to WebAssembly,</p>
+                <p>Made this page.</p>
+            </span>
+            <div class="line" style="height: 20px;">
+                <div></div>
+                <i>3/28/25</i>
+            </div>
+        </div>
 
-        <span id="update-block">
+        <span class="info-block">
             <h2>Instructions and Allowed Functions</h2>
             <p>Whatever you enter will be set equal to dy/dx.</p>
             <p>You can use x and y in your equation!</p>
