@@ -247,12 +247,14 @@ function update() {
     }
 
     let fontSize = 56;
-    ctx.font = `${fontSize}px Lingo`;
+
     ctx.textAlign = "center";
     ctx.fillStyle = "white";
 
+    fontSize = 56;
     if (topText.length > 12) fontSize = 54 - (topText.length - 12) * 2;
     if (topText.length > 18) fontSize = 48 - Math.floor((topText.length - 12) * 1.5);
+    ctx.font = `${fontSize}px Lingo`;
     ctx.fillText(topText, 250, 125);
 
     fontSize = 56;
@@ -263,6 +265,7 @@ function update() {
         if (btmText[i] == " ") str += " ";
         str += "-";
     }
+    ctx.font = `${fontSize}px Lingo`;
     ctx.fillText(str, 250, 425);
 
     if (dottedPuzzle) {
