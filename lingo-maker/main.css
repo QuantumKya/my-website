@@ -1,10 +1,10 @@
+@font-face {
+    font-family: Lingo;
+    src: url("./Lingo.ttf");
+}
+
 html {
     overflow-x: hidden;
-    @font-face {
-        font-family: Lingo;
-        src: url("./Lingo.ttf");
-    }
-
     font-family: Lingo;
 }
 
@@ -74,6 +74,12 @@ html {
 }
 
 #select-holder {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+}
+
+#forms {
     display: flex;
     flex-direction: column;
     width: fit-content;

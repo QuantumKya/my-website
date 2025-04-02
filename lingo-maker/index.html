@@ -15,9 +15,6 @@
     <link rel="stylesheet" href="main.css" type="text/css">
 
     <title>Lingo 2 Puzzle Maker</title>
-
-
-    <script src="index.js" defer></script>
 </head>
 <body>
 
@@ -30,25 +27,35 @@
 
     <div id="main">
 
-        <div style="position: relative;">
+        <div style="display: none;">
             <img id="lingo2icons" src="./lingo2icons.png" height="400px" width="400px">
         </div>
         
-        <label for="icon-count">Icon Count</label>
-        <select name="icon-count" id="icon-count">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-        </select>
+        <div id="forms">
+            <label for="cluetext">Clue Text</label>
+            <input id="cluetext">
 
-        <div id="select-holder"></div>
+            <label for="icon-count">Icon Count</label>
+            <select name="icon-count" id="icon-count">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
 
-        <canvas id="kansas" width="400px" height="400px"></canvas>
+            <label for="anstext">Answer Text</label>
+            <input id="anstext">
+
+            <div id="select-holder"></div>
+        </div>
+
+        <canvas id="kansas" width="500px" height="500px"></canvas>
 
     </div>
 
     
     <footer-component></footer-component>
+
+    <script src="index.js"></script>
 
 </body>
 </html>
