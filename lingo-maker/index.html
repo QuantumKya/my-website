@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="../main.css" type="text/css">
+
+    <script src="https://kit.fontawesome.com/332620eb80.js" crossorigin="anonymous"></script>
+
+    <script src="../sidebar.js"></script>
+    <script src="../header.js"></script> <!-- Header Import -->
+
+    <link rel="stylesheet" href="../sidebar.css" type="text/css">
+
+    <link rel="stylesheet" href="main.css" type="text/css">
+
+    <title>Lingo 2 Puzzle Maker</title>
+
+
+    <script src="index.js" defer></script>
+</head>
+<body>
+
+    <sidebar-sub-component></sidebar-sub-component>
+
+    <div style="display: none;">
+        <img id="lingo2icons" src="./lingo2icons.png" height="40px" width="40px">
+    </div>
+
+    <span>
+        <h1 id="htitle">Lingo 2 Puzzle Maker</h1>
+        <p id="ptitle">by QuantumKya</p>
+    </span>
+
+    <div id="main">
+        
+        <label for="icon-count">Icon Count</label>
+        <select name="icon-count" id="icon-count">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+
+        <div id="select-holder"></div>
+
+        <canvas id="kansas" width="400px" height="400px"></canvas>
+
+    </div>
+
+    
+    <footer-component></footer-component>
+
+</body>
+</html>
+
+<!--
+em++ main.cpp fparser/fparser.cc fparser/fpoptimizer.cc -I C:/raylib/raylib/src C:/raylib/raylib/src/libraylib.a -sASYNCIFY -sUSE_GLFW=3 -Os -o index.html
+-->

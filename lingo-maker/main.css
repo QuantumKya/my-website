@@ -1,0 +1,80 @@
+html {
+    overflow-x: hidden;
+    @font-face {
+        font-family: Lingo;
+        src: url("./Lingo.ttf");
+    }
+
+    font-family: Lingo;
+}
+
+#main {
+    position: absolute;
+    top: 100px;
+    left: 0px;
+    width: 100%;
+}
+
+#htitle {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    text-align: center;
+}
+
+#ptitle {
+    position: absolute;
+    top: 23px;
+    left: calc(50vw + 250px);
+    width: 100%;
+    text-align: left;
+}
+
+.update-block {
+    display: block;
+    border: 0.25rem solid;
+    width: fit-content;
+    padding-right: 20px;
+    padding-left: 20px;
+    background-color: #222222;
+}
+
+#update-list {
+    position: absolute;
+    left: 700px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#update-list .line {
+    border-left: 0.25rem solid;
+    align-content: start;
+    font-size: 75%;
+    vertical-align: text-top;
+}
+
+#update-list .line div {
+    display: inline-block;
+    border: 2px solid;
+    width: 2px;
+    height: 0px;
+}
+
+.info-block {
+    position: relative;
+    display: block;
+    border: 0.25rem solid;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: fit-content;
+    left: -30px;
+    background-color: #222222;
+}
+
+#select-holder {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+}
