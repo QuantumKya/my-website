@@ -45,6 +45,7 @@ class Sidebar extends HTMLElement {
         <div class="menu-item">
             <a href="lights_out.html" class="menu-link">Annoying Puzzle</a>
             <a href="slopefield/index.html" class="menu-link">DE Slope Fields</a>
+            <a href="lingo2/index.html" class="menu-link">Lingo 2 Puzzle Maker</a>
         </div>
 
         <a class="menu-header">Silly Games</a>
@@ -86,6 +87,7 @@ class SidebarSub extends HTMLElement {
         <div class="menu-item">
             <a href="../lights_out.html" class="menu-link">Annoying Puzzle</a>
             <a href="../slopefield/index.html" class="menu-link">DE Slope Fields</a>
+            <a href="../lingo2/index.html" class="menu-link">Lingo 2 Puzzle Maker</a>
         </div>
 
         <a class="menu-header">Silly Games</a>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="../main.css" type="text/css">
+
+    <script src="https://kit.fontawesome.com/332620eb80.js" crossorigin="anonymous"></script>
+
+    <script src="../sidebar.js"></script>
+    <script src="../header.js"></script> <!-- Header Import -->
+
+    <link rel="stylesheet" href="../sidebar.css" type="text/css">
+
+    <link rel="stylesheet" href="main.css" type="text/css">
+
+    <title>Lingo 2 Puzzle Maker</title>
+
+
+    <script src="index.js" defer></script>
+</head>
+<body>
+
+    <sidebar-sub-component></sidebar-sub-component>
+
+    <span>
+        <h1 id="htitle">Lingo 2 Puzzle Maker</h1>
+        <p id="ptitle">by QuantumKya</p>
+    </span>
+
+    <div id="main">
+
+        <div style="display: none;">
+            <img id="lingo2icons" src="./lingo2icons.png" height="400px" width="400px">
+        </div>
+
+        <div id="big-row">
+        
+            <div id="forms">
+                <label for="cluetext">Clue Text</label>
+                <input id="cluetext" style="width: 200px;">
+
+                <hr style="opacity: 0;">
+
+                <label for="icon-count">Glyphs</label>
+                <select name="icon-count" id="icon-count" style="width: 200px;">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+                
+                <div id="select-holder"></div>
+
+                <hr style="opacity: 0;">
+
+                <label for="anstext">Answer Text</label>
+                <input id="anstext" style="width: 200px;">
+
+                <hr style="opacity: 0;">
+                
+                <span>
+                    <label for="dotter">Dotted Puzzle?</label>
+                    <input type="checkbox" id="dotter">
+                </span>
+                
+                <hr style="opacity: 0;">
+
+                <button onclick="exportPuzzle()" style="width: 200px;">Export Puzzle</button>
+                <img style="display: none;" id="export-img">
+            </div>
+
+            <canvas id="kansas" width="500px" height="500px"></canvas>
+
+            <div id="info">
+                <h3>Welcome to Lingo 2 Puzzle Maker !</h3>
+                <p>This is for rendering Lingo 2 Puzzles. Don't worry, it's simple!</p>
+                <p>Step 1. Enter the clue and the answer.</p>
+                <p>Step 2. Choose how many glyphs you want (only up to 3 a.t.m.)</p>
+                <p>Step 3. Configure your glyphs however you want. Only up to 3 dots allowed at the moment, though.</p>
+                <p>Step 4. Export your puzzle and share it !</p>
+                <br>
+                <p>Sprites used made by GabeyK9. @</p>
+            </div>
+
+        </div>
+
+    </div>
+
+    
+    <footer-component></footer-component>
+
+</body>
+</html>
+
+<!--
+em++ main.cpp fparser/fparser.cc fparser/fpoptimizer.cc -I C:/raylib/raylib/src C:/raylib/raylib/src/libraylib.a -sASYNCIFY -sUSE_GLFW=3 -Os -o index.html
+-->
