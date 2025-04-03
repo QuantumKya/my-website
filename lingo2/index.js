@@ -407,7 +407,7 @@ function update() {
     let str = "";
     for (let i = 0; i < btmText.length; i++) {
         if (btmText[i] == " ") str += " ";
-        str += "-";
+        else str += "-";
     }
     ctx.font = `${fontSize}px Lingo`;
     ctx.fillText(str, 250, 425);
