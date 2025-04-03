@@ -63,7 +63,7 @@ setNames(
     "ultrahand", "pinky", "pinkie (pie)", "questionmark",
     "dot", "braket", "squiggle", "empty",
 
-    "katar", "parabox", "halo", "tuna"
+    "katar", "parabox", "halo", "tuna", "cymbal", "quatrefoil"
 );
 
 function getOffset(i) {
