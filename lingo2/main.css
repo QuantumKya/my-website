@@ -3,6 +3,11 @@
     src: url("./Lingo.ttf");
 }
 
+@font-face {
+    font-family: Symbolingo;
+    src: url("./LingoSymbol.ttf");
+}
+
 html {
     overflow-x: hidden;
     font-family: Lingo;

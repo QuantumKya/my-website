@@ -32,11 +32,23 @@
 
         <div style="display: none;">
             <img id="lingo2icons" src="./lingo2icons.png" height="400px" width="400px">
+            <img id="customicons" src="./customicons.png" height="400px" width="400px">
         </div>
 
         <div id="big-row">
         
             <div id="forms">
+                <!--
+                <span>
+                    <label for="customcheck">Custom Icons?</label>
+                    <input type="checkbox" id="customcheck">
+                </span>
+                -->
+                <span>
+                    <label for="pixler">Pixeled?</label>
+                    <input type="checkbox" id="pixler">
+                </span>
+                
                 <label for="cluetext">Clue Text</label>
                 <input id="cluetext" style="width: 200px;">
 
@@ -70,7 +82,7 @@
                 <img style="display: none;" id="export-img">
             </div>
 
-            <canvas id="kansas" width="500px" height="500px"></canvas>
+            <canvas id="kansas" width="500px" height="500px" style="image-rendering: pixelated;"></canvas>
 
             <div id="info">
                 <h3>Welcome to Lingo 2 Puzzle Maker !</h3>

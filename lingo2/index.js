@@ -3,31 +3,57 @@ const clueText = document.getElementById("cluetext");
 const ansText = document.getElementById("anstext");
 
 const dotter = document.getElementById("dotter");
+//const customer = document.getElementById("customcheck");
+const pixler = document.getElementById("pixler");
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
+ctx.imageSmoothingEnabled = false;
 const lingo2image = document.getElementById("lingo2icons");
+const customimage = document.getElementById("customicons");
 
 const container = document.getElementById("select-holder");
 
-
-document.onload = (event) => {
-    numSelect.value = 0;
-    clueText.value = "";
-    ansText.value = "";
+/*
+var customOn = false;
+customer.onchange = (event) => {
+    customOn = event.target.checked;
 }
+*/
+
+var pixeled = true;
+pixler.onchange = (event) => {
+    pixeled = event.target.checked;
+}
+
 
 var symbolCount = 1;
 var lingo2dict = {};
+var customdict = {};
+var symbolDict = {};
 
 function setNames() {
     let newDict = {};
-    for (let i = 0; i < arguments.length; i++) {
+    for (let i = 0; i < 23; i++) {
         let row = Math.floor(i / 5);
         let column = i % 5;
         newDict[arguments[i]] = {x: column, y: row};
     }
     lingo2dict = newDict;
+
+    let newNewDict = {};
+    for (let i = 23; i < arguments.length; i++) {
+        let row = Math.floor((i - 23) / 5);
+        let column = (i - 23) % 5;
+        newNewDict[arguments[i]] = {x: column, y: row};
+    }
+    customdict = newNewDict;
+
+    let symDict = {};
+    for (let i = 0; i < 23; i++) {
+        symDict[arguments[i]] = String.fromCharCode(97 + i);
+    }
+    symbolDict = symDict;
 }
 
 setNames(
@@ -35,8 +61,9 @@ setNames(
     "quake", "saturn", "magenta", "cross", "starstruck",
     "nullset", "scramble", "speaker", "northernlights", "smiley",
     "ultrahand", "pinky", "pinkie (pie)", "questionmark",
-    
-    "double dot", "braket", "squiggle"
+    "dot", "braket", "squiggle", "empty",
+
+    "katar", "parabox", "halo", "tuna"
 );
 
 function getOffset(i) {
@@ -59,11 +86,13 @@ function getOffset(i) {
 var symbolX = 210;
 var symbolY = 210;
 
-function draw(x, y, i) {
-    ctx.drawImage(lingo2image,
-        x * 80,
-        y * 80,
-        80, 80,
+
+
+function draw(x, y, i, c) {
+    ctx.drawImage(c ? customimage : lingo2image,
+        x * 8,
+        y * 8,
+        8, 8,
         symbolX + getOffset(i),
         symbolY,
         100, 100
@@ -73,9 +102,9 @@ function draw(x, y, i) {
 function drawNegative(i, high) {
     if (high) {
         ctx.drawImage(lingo2image,
-            0 * 80,
-            4 * 80,
-            80, 80,
+            0 * 8,
+            4 * 8,
+            8, 8,
             symbolX + getOffset(i),
             symbolY - 100,
             100, 100
@@ -83,9 +112,9 @@ function drawNegative(i, high) {
     }
     else {
         ctx.drawImage(lingo2image,
-            0 * 80,
-            4 * 80,
-            80, 80,
+            0 * 8,
+            4 * 8,
+            8, 8,
             symbolX + getOffset(i),
             symbolY - 70,
             100, 100
@@ -94,9 +123,29 @@ function drawNegative(i, high) {
 }
 function drawSquiggle(i) {
     ctx.drawImage(lingo2image,
-        1 * 80,
-        4 * 80,
-        80, 80,
+        1 * 8,
+        4 * 8,
+        8, 8,
+        symbolX + getOffset(i),
+        symbolY - 70,
+        100, 100
+    );
+}
+function drawHalo(i) {
+    ctx.drawImage(customimage,
+        2 * 8,
+        0 * 8,
+        8, 8,
+        symbolX + getOffset(i),
+        symbolY - 70,
+        100, 100
+    );
+}
+function drawTuna(i) {
+    ctx.drawImage(customimage,
+        3 * 8,
+        0 * 8,
+        8, 8,
         symbolX + getOffset(i),
         symbolY - 70,
         100, 100
@@ -118,9 +167,9 @@ function drawDots(count, i) {
             else if (j == 2) offset = 25;
         }
         ctx.drawImage(lingo2image,
-            4 * 80,
-            3 * 80,
-            80, 80,
+            4 * 8,
+            3 * 8,
+            8, 8,
             symbolX + getOffset(i) + offset,
             symbolY + 70,
             100, 100
@@ -129,9 +178,47 @@ function drawDots(count, i) {
 }
 
 function drawIcon(name, index) {
-    draw(lingo2dict[name].x, lingo2dict[name].y, index);
+    if (Object.hasOwn(lingo2dict, name)) draw(lingo2dict[name].x, lingo2dict[name].y, index, false);
+    else draw(customdict[name].x, customdict[name].y, index, true);
 }
 
+
+function symbolIcon(name, index, dots) {
+    ctx.fillStyle = "white";
+    ctx.font = "132px Symbolingo";
+    ctx.textAlign = "center";
+    let text = "";
+    if (dots > 0) text = symbolDict[name] + String.fromCharCode(787 + parseInt(dots));
+    else text = symbolDict[name];
+    ctx.fillText(text, symbolX + getOffset(index) + 44, symbolY + 88);
+}
+function symbolNegate(name, index, dots) {
+    ctx.fillStyle = "white";
+    ctx.font = "132px Symbolingo";
+    ctx.textAlign = "center";
+    let text = "";
+    if (dots > 0) text = symbolDict[name] + String.fromCharCode(787 + parseInt(dots));
+    else text = symbolDict[name];
+    ctx.fillText(text + String.fromCharCode(787), symbolX + getOffset(index) + 44, symbolY + 88);
+}
+function symbolSquiggle(name, index, dots) {
+    ctx.fillStyle = "white";
+    ctx.font = "132px Symbolingo";
+    ctx.textAlign = "center";
+    let text = "";
+    if (dots > 0) text = symbolDict[name] + String.fromCharCode(787 + parseInt(dots));
+    else text = symbolDict[name];
+    ctx.fillText(text + String.fromCharCode(786), symbolX + getOffset(index) + 44, symbolY + 88);
+}
+function symbolSquigation(name, index, dots) {
+    ctx.fillStyle = "white";
+    ctx.font = "132px Symbolingo";
+    ctx.textAlign = "center";
+    let text = "";
+    if (dots > 0) text = symbolDict[name] + String.fromCharCode(787 + parseInt(dots));
+    else text = symbolDict[name];
+    ctx.fillText(text + String.fromCharCode(786) + String.fromCharCode(787), symbolX + getOffset(index) + 44, symbolY + 88);
+}
 
 var dottedPuzzle = false;
 dotter.onchange = (event) => {
@@ -152,6 +239,12 @@ numSelect.onchange = (event) => {
         theSpan.classList.add("symbol-custom");
         const select = document.createElement("select");
         for (const key in lingo2dict) {
+            const option = document.createElement("option");
+            option.value = key;
+            option.textContent = key;
+            select.appendChild(option);
+        }
+        for (const key in customdict) {
             const option = document.createElement("option");
             option.value = key;
             option.textContent = key;
@@ -180,6 +273,26 @@ numSelect.onchange = (event) => {
         squiggleSpan.appendChild(squiggleCheckbox);
         squiggleSpan.appendChild(squiggleLabel);
 
+        const haloSpan = document.createElement("span");
+        const haloCheckbox = document.createElement("input");
+        haloCheckbox.type = "checkbox";
+        haloCheckbox.id = `halo-${i}`;
+        const haloLabel = document.createElement("label");
+        haloLabel.htmlFor = `halo-${i}`;
+        haloLabel.textContent = "halo";
+        haloSpan.appendChild(haloCheckbox);
+        haloSpan.appendChild(haloLabel);
+
+        const tunaSpan = document.createElement("span");
+        const tunaCheckbox = document.createElement("input");
+        tunaCheckbox.type = "checkbox";
+        tunaCheckbox.id = `tuna-${i}`;
+        const tunaLabel = document.createElement("label");
+        tunaLabel.htmlFor = `tuna-${i}`;
+        tunaLabel.textContent = "tuna";
+        tunaSpan.appendChild(tunaCheckbox);
+        tunaSpan.appendChild(tunaLabel);
+
         const dotSpan = document.createElement("span");
         const dotCount = document.createElement("input");
         dotCount.type = "number";
@@ -194,10 +307,12 @@ numSelect.onchange = (event) => {
 
         theSpan.appendChild(negateSpan);
         theSpan.appendChild(squiggleSpan);
+        theSpan.appendChild(haloSpan);
+        theSpan.appendChild(tunaSpan);
         theSpan.appendChild(dotSpan);
 
         container.appendChild(theSpan);
-        currySymbols[i] = {name: "sundae", neg: false, squiggle: false, dots: 0};
+        currySymbols[i] = {name: "sundae", neg: false, squiggle: false, halo: false, tuna: false, dots: 0};
     }
 
     for (let i = 0; i < symbolCount; i++) {
@@ -211,6 +326,12 @@ numSelect.onchange = (event) => {
             currySymbols[i].squiggle = event.target.checked;
         };
         container.children[i].children[3].children[0].onchange = (event) => {
+            currySymbols[i].halo = event.target.checked;
+        };
+        container.children[i].children[4].children[0].onchange = (event) => {
+            currySymbols[i].tuna = event.target.checked;
+        };
+        container.children[i].children[5].children[0].onchange = (event) => {
             currySymbols[i].dots = event.target.value;
         };
     }
@@ -232,18 +353,41 @@ function update() {
     ctx.fillStyle = "#1e5c7d";
     ctx.fillRect(25, 25, 450, 450);
     for (let i = 0; i < currySymbols.length; i++) {
-        drawIcon(currySymbols[i].name, i);
-        if (currySymbols[i].neg && currySymbols[i].squiggle) {
-            drawSquiggle(i);
-            drawNegative(i, true);
+        if (pixeled) {
+            drawIcon(currySymbols[i].name, i);
+            if (currySymbols[i].neg && currySymbols[i].squiggle) {
+                drawSquiggle(i);
+                drawNegative(i, true);
+            }
+            else if (currySymbols[i].neg) {
+                drawNegative(i, false);
+            }
+            else if (currySymbols[i].squiggle) {
+                drawSquiggle(i);
+            }
+            else if (currySymbols[i].halo) {
+                drawHalo(i);
+            }
+            else if (currySymbols[i].tuna) {
+                drawTuna(i);
+            }
+            drawDots(currySymbols[i].dots, i);
         }
-        else if (currySymbols[i].neg) {
-            drawNegative(i, false);
+        else {
+            let dots = currySymbols[i].dots;
+            if (currySymbols[i].neg && currySymbols[i].squiggle) {
+                symbolSquigation(currySymbols[i].name, i, dots);
+            }
+            else if (currySymbols[i].neg) {
+                symbolNegate(currySymbols[i].name, i, dots);
+            }
+            else if (currySymbols[i].squiggle) {
+                symbolSquiggle(currySymbols[i].name, i, dots);
+            }
+            else {
+                symbolIcon(currySymbols[i].name, i, dots);
+            }
         }
-        else if (currySymbols[i].squiggle) {
-            drawSquiggle(i);
-        }
-        drawDots(currySymbols[i].dots, i);
     }
 
     let fontSize = 56;
