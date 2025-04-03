@@ -11,6 +11,7 @@ const ctx = canvas.getContext("2d");
 ctx.imageSmoothingEnabled = false;
 const lingo2image = document.getElementById("lingo2icons");
 const customimage = document.getElementById("customicons");
+const alphabet = document.getElementById("alphabet");
 
 const container = document.getElementById("select-holder");
 
@@ -30,6 +31,7 @@ pixler.onchange = (event) => {
 var symbolCount = 1;
 var lingo2dict = {};
 var customdict = {};
+var letterdict = {};
 var symbolDict = {};
 
 function setNames() {
@@ -41,19 +43,30 @@ function setNames() {
     }
     lingo2dict = newDict;
 
-    let newNewDict = {};
-    for (let i = 23; i < arguments.length; i++) {
+    newDict = {};
+    for (let i = 23; i < 49; i++) {
         let row = Math.floor((i - 23) / 5);
         let column = (i - 23) % 5;
-        newNewDict[arguments[i]] = {x: column, y: row};
+        newDict[arguments[i]] = {x: column, y: row};
     }
-    customdict = newNewDict;
+    letterdict = newDict;
 
-    let symDict = {};
-    for (let i = 0; i < 23; i++) {
-        symDict[arguments[i]] = String.fromCharCode(97 + i);
+    newDict = {};
+    for (let i = 49; i < arguments.length; i++) {
+        let row = Math.floor((i - 49) / 5);
+        let column = (i - 49) % 5;
+        newDict[arguments[i]] = {x: column, y: row};
     }
-    symbolDict = symDict;
+    customdict = newDict;
+
+    newDict = {};
+    for (let i = 0; i < 23; i++) {
+        newDict[arguments[i]] = String.fromCharCode(97 + i);
+    }
+    for (let i = 23; i < 49; i++) {
+        newDict[arguments[i]] = String.fromCharCode(65 + (i - 23));
+    }
+    symbolDict = newDict;
 }
 
 setNames(
@@ -63,7 +76,9 @@ setNames(
     "ultrahand", "pinky", "pinkie (pie)", "questionmark",
     "dot", "braket", "squiggle", "empty",
 
-    "katar", "parabox", "halo", "tuna", "cymbal", "quatrefoil"
+    "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
+
+    "katar", "parabox", "halo", "tuna", "cymbal", "quadfoil"
 );
 
 function getOffset(i) {
@@ -87,9 +102,8 @@ var symbolX = 210;
 var symbolY = 210;
 
 
-
-function draw(x, y, i, c) {
-    ctx.drawImage(c ? customimage : lingo2image,
+function drawFunc(x, y, i, map) {
+    ctx.drawImage(map,
         x * 8,
         y * 8,
         8, 8,
@@ -98,58 +112,48 @@ function draw(x, y, i, c) {
         100, 100
     );
 }
+function drawFuncO(x, y, i, map, offset) {
+    ctx.drawImage(map,
+        x * 8,
+        y * 8,
+        8, 8,
+        symbolX + getOffset(i),
+        symbolY + offset,
+        100, 100
+    );
+}
+
+function draw(x, y, i, c) {
+    let map;
+    switch(c) {
+        case 0:
+            map = lingo2image;
+            break;
+        case 1:
+            map = customimage;
+            break;
+        case 2:
+            map = alphabet;
+            break;
+        default:
+            map = lingo2image;
+            break;
+    };
+    drawFunc(x, y, i, map);
+}
 
 function drawNegative(i, high) {
-    if (high) {
-        ctx.drawImage(lingo2image,
-            0 * 8,
-            4 * 8,
-            8, 8,
-            symbolX + getOffset(i),
-            symbolY - 100,
-            100, 100
-        );
-    }
-    else {
-        ctx.drawImage(lingo2image,
-            0 * 8,
-            4 * 8,
-            8, 8,
-            symbolX + getOffset(i),
-            symbolY - 70,
-            100, 100
-        );
-    }
+    if (high) drawFuncO(0, 4, i, lingo2image, -100);
+    else drawFuncO(0, 4, i, lingo2image, -70);
 }
 function drawSquiggle(i) {
-    ctx.drawImage(lingo2image,
-        1 * 8,
-        4 * 8,
-        8, 8,
-        symbolX + getOffset(i),
-        symbolY - 70,
-        100, 100
-    );
+    drawFuncO(1, 4, i, lingo2image, -70);
 }
 function drawHalo(i) {
-    ctx.drawImage(customimage,
-        2 * 8,
-        0 * 8,
-        8, 8,
-        symbolX + getOffset(i),
-        symbolY - 70,
-        100, 100
-    );
+    drawFuncO(2, 0, i, customimage, -70);
 }
 function drawTuna(i) {
-    ctx.drawImage(customimage,
-        3 * 8,
-        0 * 8,
-        8, 8,
-        symbolX + getOffset(i),
-        symbolY - 70,
-        100, 100
-    );
+    drawFuncO(3, 0, i, customimage, -70);
 }
 function drawDots(count, i) {
     for (let j = 0; j < count; j++) {
@@ -166,58 +170,57 @@ function drawDots(count, i) {
             else if (j == 1) offset = -5;
             else if (j == 2) offset = 25;
         }
-        ctx.drawImage(lingo2image,
-            4 * 8,
-            3 * 8,
-            8, 8,
-            symbolX + getOffset(i) + offset,
-            symbolY + 70,
-            100, 100
-        );
+        drawFuncO(4, 3, i, lingo2image, 70);
     }
 }
 
 function drawIcon(name, index) {
-    if (Object.hasOwn(lingo2dict, name)) draw(lingo2dict[name].x, lingo2dict[name].y, index, false);
-    else draw(customdict[name].x, customdict[name].y, index, true);
+    if (Object.keys(lingo2dict).includes(name)) {
+        draw(lingo2dict[name].x, lingo2dict[name].y, index, 0);
+    } else if (Object.keys(customdict).includes(name)) {
+        draw(customdict[name].x, customdict[name].y, index, 1);
+    } else if (Object.keys(letterdict).includes(name)) {
+        draw(letterdict[name].x, letterdict[name].y, index, 2);
+    } else {
+        console.error(`Icon "${name}" not found in any dictionary.`);
+    }
 }
 
 
-function symbolIcon(name, index, dots) {
+function symbolDraw(text, index) {
     ctx.fillStyle = "white";
     ctx.font = "132px Symbolingo";
     ctx.textAlign = "center";
-    let text = "";
-    if (dots > 0) text = symbolDict[name] + String.fromCharCode(787 + parseInt(dots));
-    else text = symbolDict[name];
     ctx.fillText(text, symbolX + getOffset(index) + 44, symbolY + 88);
 }
-function symbolNegate(name, index, dots) {
-    ctx.fillStyle = "white";
-    ctx.font = "132px Symbolingo";
-    ctx.textAlign = "center";
+
+function symbolIcon(name, index, dots, c) {
+    let letter = (c == 1);
     let text = "";
+    if (letter) {
+        if (dots > 0) text = name + String.fromCharCode(787 + parseInt(dots));
+        else text = name;
+    }
+    else {
+        if (dots > 0) text = symbolDict[name] + String.fromCharCode(787 + parseInt(dots));
+        else text = symbolDict[name];
+    }
+    symbolDraw(text, index);
+}
+function symbolNegate(name, index, dots) {
+    let text = symbolDict[name];
     if (dots > 0) text = symbolDict[name] + String.fromCharCode(787 + parseInt(dots));
-    else text = symbolDict[name];
-    ctx.fillText(text + String.fromCharCode(787), symbolX + getOffset(index) + 44, symbolY + 88);
+    symbolDraw(text, index);
 }
 function symbolSquiggle(name, index, dots) {
-    ctx.fillStyle = "white";
-    ctx.font = "132px Symbolingo";
-    ctx.textAlign = "center";
-    let text = "";
+    let text = symbolDict[name];
     if (dots > 0) text = symbolDict[name] + String.fromCharCode(787 + parseInt(dots));
-    else text = symbolDict[name];
-    ctx.fillText(text + String.fromCharCode(786), symbolX + getOffset(index) + 44, symbolY + 88);
+    symbolDraw(text, index);
 }
 function symbolSquigation(name, index, dots) {
-    ctx.fillStyle = "white";
-    ctx.font = "132px Symbolingo";
-    ctx.textAlign = "center";
-    let text = "";
+    let text = symbolDict[name];
     if (dots > 0) text = symbolDict[name] + String.fromCharCode(787 + parseInt(dots));
-    else text = symbolDict[name];
-    ctx.fillText(text + String.fromCharCode(786) + String.fromCharCode(787), symbolX + getOffset(index) + 44, symbolY + 88);
+    symbolDraw(text, index);
 }
 
 var dottedPuzzle = false;
@@ -245,6 +248,12 @@ numSelect.onchange = (event) => {
             select.appendChild(option);
         }
         for (const key in customdict) {
+            const option = document.createElement("option");
+            option.value = key;
+            option.textContent = key;
+            select.appendChild(option);
+        }
+        for (const key in letterdict) {
             const option = document.createElement("option");
             option.value = key;
             option.textContent = key;
