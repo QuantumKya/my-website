@@ -101,11 +101,29 @@
             </div>
 
         </div>
+        
+        <span style="display: flex; flex-direction: row;">
+            <div id="infoplus" style="position: relative; top: -160px; text-wrap: wrap; width: 400px;">
+                <p>For now, Custom icons are only functional in pixel mode,</p>
+                <p>and O-likes can only have modifiers in pixel mode.</p>
+            </div>
+            
+            <!--
+            <div id="saveload" style="position: relative; top: -60px; left: 80px; text-wrap: wrap; width: 400px; display: flex; gap: 40px; flex-direction: row; height: 20px;">
+                <input type="text" id="b64input" style="width: 200px;" placeholder="Base64 Puzzle Data">
+                <button onclick="LoadPuzzle(document.getElementById('b64input').value);" id="b64input" style="width: fit-content;">Load</button>
+                <button onclick="DataBase64()" id="b64output" style="width: fit-content;">Copy Current</button>
+            </div>
+            -->
+        </span>
+        
 
-        <div id="infoplus" style="position: relative; top: -160px; text-wrap: wrap; width: 400px;">
-            <p>For now, Custom icons are only functional in pixel mode,</p>
-            <p>and O-likes can only have modifiers in pixel mode.</p>
-        </div>
+        <!--
+        Suggestions:
+        - Implement correctly the copying and loading of puzzles.
+        - Add multi-page puzzles.
+        - Add 4-line puzzles (I don't think I will do this, but who knows?).
+        -->
 
     </div>
 
@@ -114,7 +132,3 @@
 
 </body>
 </html>
-
-<!--
-em++ main.cpp fparser/fparser.cc fparser/fpoptimizer.cc -I C:/raylib/raylib/src C:/raylib/raylib/src/libraylib.a -sASYNCIFY -sUSE_GLFW=3 -Os -o index.html
--->

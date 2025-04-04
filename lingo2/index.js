@@ -180,8 +180,8 @@ function drawNegative(i, high = 70) {
 function drawSquiggle(i) {
     drawFuncO(1, 4, i, lingo2image, -70);
 }
-function drawHalo(i) {
-    drawFuncO(2, 0, i, customimage, -70);
+function drawHalo(i, high = 70) {
+    drawFuncO(2, 0, i, customimage, -high);
 }
 function drawTuna(i) {
     drawFuncO(3, 0, i, customimage, -70);
@@ -259,12 +259,7 @@ dotter.onchange = (event) => {
 
 var currySymbols = [];
 
-numSelect.onchange = (event) => {
-    console.log(event.target.value);
-    symbolCount = event.target.value;
-    container.innerHTML = "";
-
-    
+function setGlyphs() {
     currySymbols = [];
     for (let i = 0; i < symbolCount; i++) {
         const theSpan = document.createElement("span");
@@ -373,6 +368,14 @@ numSelect.onchange = (event) => {
             currySymbols[i].dots = event.target.value;
         };
     }
+}
+
+numSelect.onchange = (event) => {
+    console.log(event.target.value);
+    symbolCount = event.target.value;
+    container.innerHTML = "";
+
+    setGlyphs();
 };
 
 var topText = "";
@@ -385,6 +388,41 @@ ansText.onchange = (event) => {
     btmText = event.target.value;
 };
 
+
+function DataBase64() {
+    let data = {
+        clue: topText,
+        answer: btmText,
+        symbol: symbolCount,
+        symbolArr: currySymbols,
+        dotted: dottedPuzzle,
+        pixelMode: pixeled
+    }
+    navigator.clipboard.writeText(btoa(JSON.stringify(data)));
+    alert("Puzzle copied to clipboard!");
+}
+
+function LoadPuzzle(data) {
+    let json = JSON.parse(atob(data));
+    topText = json.clue;
+    btmText = json.answer;
+    symbolCount = json.symbol;
+    currySymbols = json.symbolArr;
+    dottedPuzzle = json.dotted;
+    dotter.checked = dottedPuzzle;
+    pixeled = json.pixelMode;
+    pixler.checked = pixeled;
+    setGlyphs();
+    for (let i = 0; i < symbolCount; i++) {
+        container.children[i].children[0].value = currySymbols[i].name;
+        container.children[i].children[1].children[0].checked = currySymbols[i].neg;
+        container.children[i].children[2].children[0].checked = currySymbols[i].squiggle;
+        container.children[i].children[3].children[0].checked = currySymbols[i].halo;
+        container.children[i].children[4].children[0].checked = currySymbols[i].tuna;
+        container.children[i].children[5].children[0].value = currySymbols[i].dots;
+    }
+}
+
 function update() {
     ctx.fillStyle = "gray";
     ctx.fillRect(0, 0, 500, 500);
@@ -392,26 +430,33 @@ function update() {
     ctx.fillRect(25, 25, 450, 450);
     for (let i = 0; i < currySymbols.length; i++) {
         if (pixeled) {
-            drawIcon(currySymbols[i].name, i);
-            if (currySymbols[i].neg) {
-                if (currySymbols[i].squiggle) {
-                    drawNegative(i, 100);
-                }
-                else if (currySymbols[i].halo || currySymbols[i].tuna) {
-                    drawNegative(i, 115);
-                }
-                else if ((currySymbols[i].halo || currySymbols[i].tuna) && currySymbols[i].squiggle) {
-                    drawNegative(i, 145);
-                }
-                else drawNegative(i, 70);
+            if (currySymbols[i].squiggle && currySymbols[i].neg) {
+                drawNegative(i, 85);
                 symbolY = 225;
             }
-            if (currySymbols[i].squiggle) {
-                drawSquiggle(i);
+            else if ((currySymbols[i].halo || currySymbols[i].tuna) && currySymbols[i].neg) {
+                drawNegative(i, 115);
+                if (currySymbols[i].halo) drawHalo(i);
+                symbolY = 225;
+            }
+            else if (currySymbols[i].neg) {
+                drawNegative(i);
+                symbolY = 225;
+            }
+            else if (currySymbols[i].squiggle && currySymbols[i].halo) {
+                drawHalo(i, 85);
+                symbolY = 225;
+            }
+            else if (currySymbols[i].tuna && currySymbols[i].halo) {
+                drawHalo(i, 115);
                 symbolY = 225;
             }
             else if (currySymbols[i].halo) {
                 drawHalo(i);
+                symbolY = 225;
+            }
+            if (currySymbols[i].squiggle) {
+                drawSquiggle(i);
                 symbolY = 225;
             }
             else if (currySymbols[i].tuna) {
@@ -420,6 +465,8 @@ function update() {
             }
             else symbolY = 210;
             drawDots(currySymbols[i].dots, i);
+            drawIcon(currySymbols[i].name, i);
+            symbolY = 210;
         }
         else {
             let dots = currySymbols[i].dots;
