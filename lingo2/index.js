@@ -144,6 +144,16 @@ function drawFuncO(x, y, i, map, offset) {
         104, 104
     );
 }
+function drawFuncD(x, y, i, map, offset) {
+    ctx.drawImage(map,
+        x * 8,
+        y * 8,
+        8, 8,
+        symbolX + getOffset(i) + offset,
+        symbolY + 70,
+        104, 104
+    );
+}
 
 function draw(x, y, i, c) {
     let map;
@@ -191,7 +201,7 @@ function drawDots(count, i) {
             else if (j == 1) offset = -5;
             else if (j == 2) offset = 25;
         }
-        drawFuncO(4, 3, i, lingo2image, 70);
+        drawFuncD(4, 3, i, lingo2image, offset);
     }
 }
 
