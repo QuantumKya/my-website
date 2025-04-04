@@ -436,12 +436,16 @@ function update() {
         if (pixeled) {
             if (currySymbols[i].squiggle && currySymbols[i].neg) {
                 symbolY = 225;
-                drawNegative(i, 85);
+                drawNegative(i, 100);
             }
-            else if ((currySymbols[i].halo || currySymbols[i].tuna) && currySymbols[i].neg) {
+            else if (currySymbols[i].tuna && currySymbols[i].neg) {
                 symbolY = 225;
                 drawNegative(i, 115);
-                if (currySymbols[i].halo) drawHalo(i);
+            }
+            else if (currySymbols[i].halo && currySymbols[i].neg) {
+                symbolY = 225;
+                drawNegative(i, 115);
+                drawHalo(i);
             }
             else if (currySymbols[i].neg) {
                 symbolY = 225;
@@ -449,7 +453,7 @@ function update() {
             }
             else if (currySymbols[i].squiggle && currySymbols[i].halo) {
                 symbolY = 225;
-                drawHalo(i, 85);
+                drawHalo(i, 100);
             }
             else if (currySymbols[i].tuna && currySymbols[i].halo) {
                 symbolY = 225;
@@ -459,6 +463,7 @@ function update() {
                 symbolY = 225;
                 drawHalo(i);
             }
+            else symbolY = 210;
             if (currySymbols[i].squiggle) {
                 symbolY = 225;
                 drawSquiggle(i);
@@ -467,7 +472,6 @@ function update() {
                 symbolY = 225;
                 drawTuna(i);
             }
-            else symbolY = 210;
             drawDots(currySymbols[i].dots, i);
             drawIcon(currySymbols[i].name, i);
             symbolY = 210;
