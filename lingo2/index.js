@@ -193,15 +193,15 @@ function drawDots(count, i) {
             offset = 0;
         }
         else if (count == 2) {
-            if (j == 0) offset = -25;
-            else if (j == 1) offset = 15;
+            if (j == 0) offset = -20;
+            else if (j == 1) offset = 20;
         }
         else if (count == 3) {
-            if (j == 0) offset = -35;
-            else if (j == 1) offset = -5;
-            else if (j == 2) offset = 25;
+            if (j == 0) offset = -30;
+            else if (j == 1) offset = 0;
+            else if (j == 2) offset = 30;
         }
-        drawFuncD(4, 3, j, lingo2image, offset);
+        drawFuncD(4, 3, i, lingo2image, offset);
     }
 }
 
