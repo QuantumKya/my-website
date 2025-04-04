@@ -394,31 +394,40 @@ function update() {
                     drawNegative(i, 145);
                 }
                 else drawNegative(i, 70);
+                symbolY = 225;
             }
             if (currySymbols[i].squiggle) {
                 drawSquiggle(i);
+                symbolY = 225;
             }
             else if (currySymbols[i].halo) {
                 drawHalo(i);
+                symbolY = 225;
             }
             else if (currySymbols[i].tuna) {
                 drawTuna(i);
+                symbolY = 225;
             }
+            else symbolY = 210;
             drawDots(currySymbols[i].dots, i);
         }
         else {
             let dots = currySymbols[i].dots;
             if (currySymbols[i].neg && currySymbols[i].squiggle) {
                 symbolSquigation(currySymbols[i].name, i, dots);
+                symbolY = 225;
             }
             else if (currySymbols[i].neg) {
                 symbolNegate(currySymbols[i].name, i, dots);
+                symbolY = 225;
             }
             else if (currySymbols[i].squiggle) {
                 symbolSquiggle(currySymbols[i].name, i, dots);
+                symbolY = 225;
             }
             else {
                 symbolIcon(currySymbols[i].name, i, dots);
+                symbolY = 210;
             }
         }
     }
