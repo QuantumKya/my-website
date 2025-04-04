@@ -45,10 +45,6 @@
                     <input type="checkbox" id="customcheck">
                 </span>
                 -->
-                <span>
-                    <label for="pixler">Pixeled?</label>
-                    <input type="checkbox" id="pixler">
-                </span>
                 
                 <label for="cluetext">Clue Text</label>
                 <input id="cluetext" style="width: 200px;">
@@ -61,6 +57,7 @@
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
+                    <option value="4">4</option>
                 </select>
                 
                 <div id="select-holder"></div>
@@ -72,6 +69,11 @@
 
                 <hr style="opacity: 0;">
                 
+                <span>
+                    <label for="pixler">Pixel Mode?</label>
+                    <input type="checkbox" id="pixler">
+                </span>
+
                 <span>
                     <label for="dotter">Dotted Puzzle?</label>
                     <input type="checkbox" id="dotter">
@@ -92,10 +94,17 @@
                 <p>Step 2. Choose how many glyphs you want (only up to 3 a.t.m.)</p>
                 <p>Step 3. Configure your glyphs however you want. Only up to 3 dots allowed at the moment, though.</p>
                 <p>Step 4. Export your puzzle and share it !</p>
-                <br>
-                <p>Sprites used made by GabeyK9. @</p>
+                <div style="font-size: 120%; display: flex; gap: 5px;">
+                    <p>Sprites used made by GabeyK9. @</p>
+                    <p>Additional custom sprites by me.</p>
+                </div>
             </div>
 
+        </div>
+
+        <div id="infoplus" style="position: relative; top: -160px; text-wrap: wrap; width: 400px;">
+            <p>For now, Custom icons are only functional in pixel mode,</p>
+            <p>and O-likes can only have modifiers in pixel mode.</p>
         </div>
 
     </div>

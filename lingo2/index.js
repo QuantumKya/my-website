@@ -27,6 +27,20 @@ pixler.onchange = (event) => {
     pixeled = event.target.checked;
 }
 
+document.onload = () => {
+    pixeled = true;
+    pixler.setAttribute("checked", true);
+    dottedPuzzle = false;
+    dotter.setAttribute("checked", false);
+    symbolCount = 1;
+    numSelect.setAttribute("value", 1);
+    
+    topText = "clue";
+    btmText = "answer";
+    clueText.value = topText;
+    ansText.value = btmText;
+}
+
 
 var symbolCount = 1;
 var lingo2dict = {};
@@ -63,6 +77,7 @@ function setNames() {
     for (let i = 0; i < 23; i++) {
         newDict[arguments[i]] = String.fromCharCode(97 + i);
     }
+    newDict[arguments[22]] = 't';
     for (let i = 23; i < 49; i++) {
         newDict[arguments[i]] = String.fromCharCode(65 + (i - 23));
     }
@@ -78,28 +93,35 @@ setNames(
 
     "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
 
-    "katar", "parabox", "halo", "tuna", "cymbal", "quadfoil"
+    "katar", "parabox", "halo", "tuna", "cymbal", "quatrefoil", "linkbetweenwords", "poketoads"
 );
 
 function getOffset(i) {
+    const rdjt = -10;
     var offset = 0;
     if (symbolCount == 1) {
-        offset = 0;
+        offset = rdjt;
     }
     else if (symbolCount == 2) {
-        if (i == 0) offset = -50 - 5;
-        else if (i == 1) offset = 50 + 5;
+        if (i == 0) offset = -50 - 5 - 2 + rdjt;
+        else if (i == 1) offset = 50 + 5 + 2 + rdjt;
     }
     else if (symbolCount == 3) {
-        if (i == 0) offset = -100 - 10;
-        else if (i == 2) offset = 100 + 10;
-        else if (i == 1) offset = 0;
+        if (i == 0) offset = -100 - 10 - 4 + rdjt;
+        else if (i == 1) offset = 0 + rdjt;
+        else if (i == 2) offset = 100 + 10 + 4 + rdjt;
+    }
+    else if (symbolCount == 4) {
+        if (i == 0) offset = -150 - 15 - 6 + rdjt;
+        else if (i == 1) offset = -50 - 5 - 2 + rdjt;
+        else if (i == 2) offset = 50 + 5 + 2 + rdjt;
+        else if (i == 3) offset = 150 + 15 + 6 + rdjt;
     }
     return offset;
 }
 
 var symbolX = 210;
-var symbolY = 210;
+var symbolY = 225;
 
 
 function drawFunc(x, y, i, map) {
@@ -109,7 +131,7 @@ function drawFunc(x, y, i, map) {
         8, 8,
         symbolX + getOffset(i),
         symbolY,
-        100, 100
+        104, 104
     );
 }
 function drawFuncO(x, y, i, map, offset) {
@@ -119,7 +141,7 @@ function drawFuncO(x, y, i, map, offset) {
         8, 8,
         symbolX + getOffset(i),
         symbolY + offset,
-        100, 100
+        104, 104
     );
 }
 
@@ -142,9 +164,8 @@ function draw(x, y, i, c) {
     drawFunc(x, y, i, map);
 }
 
-function drawNegative(i, high) {
-    if (high) drawFuncO(0, 4, i, lingo2image, -100);
-    else drawFuncO(0, 4, i, lingo2image, -70);
+function drawNegative(i, high = 70) {
+    drawFuncO(0, 4, i, lingo2image, -high);
 }
 function drawSquiggle(i) {
     drawFuncO(1, 4, i, lingo2image, -70);
@@ -194,33 +215,31 @@ function symbolDraw(text, index) {
     ctx.fillText(text, symbolX + getOffset(index) + 44, symbolY + 88);
 }
 
-function symbolIcon(name, index, dots, c) {
-    let letter = (c == 1);
+function symbolProc(name, dots, extraC = '') {
+    let letter = Object.hasOwn(letterdict, name);
     let text = "";
     if (letter) {
-        if (dots > 0) text = name + String.fromCharCode(787 + parseInt(dots));
-        else text = name;
+        if (dots > 0) text = name.toUpperCase() + String.fromCharCode(787 + parseInt(dots)) + extraC;
+        else text = name.toUpperCase() + extraC;
     }
     else {
-        if (dots > 0) text = symbolDict[name] + String.fromCharCode(787 + parseInt(dots));
-        else text = symbolDict[name];
+        if (dots > 0) text = symbolDict[name] + String.fromCharCode(787 + parseInt(dots)) + extraC;
+        else text = symbolDict[name] + extraC;
     }
-    symbolDraw(text, index);
+    return text;
+}
+
+function symbolIcon(name, index, dots) {
+    symbolDraw(symbolProc(name, dots), index);
 }
 function symbolNegate(name, index, dots) {
-    let text = symbolDict[name];
-    if (dots > 0) text = symbolDict[name] + String.fromCharCode(787 + parseInt(dots));
-    symbolDraw(text, index);
+    symbolDraw(symbolProc(name, dots, String.fromCharCode(787)), index);
 }
 function symbolSquiggle(name, index, dots) {
-    let text = symbolDict[name];
-    if (dots > 0) text = symbolDict[name] + String.fromCharCode(787 + parseInt(dots));
-    symbolDraw(text, index);
+    symbolDraw(symbolProc(name, dots, String.fromCharCode(786)), index);
 }
 function symbolSquigation(name, index, dots) {
-    let text = symbolDict[name];
-    if (dots > 0) text = symbolDict[name] + String.fromCharCode(787 + parseInt(dots));
-    symbolDraw(text, index);
+    symbolDraw(symbolProc(name, dots, String.fromCharCode(786) + String.fromCharCode(787)), index);
 }
 
 var dottedPuzzle = false;
@@ -364,14 +383,19 @@ function update() {
     for (let i = 0; i < currySymbols.length; i++) {
         if (pixeled) {
             drawIcon(currySymbols[i].name, i);
-            if (currySymbols[i].neg && currySymbols[i].squiggle) {
-                drawSquiggle(i);
-                drawNegative(i, true);
+            if (currySymbols[i].neg) {
+                if (currySymbols[i].squiggle) {
+                    drawNegative(i, 100);
+                }
+                else if (currySymbols[i].halo || currySymbols[i].tuna) {
+                    drawNegative(i, 115);
+                }
+                else if ((currySymbols[i].halo || currySymbols[i].tuna) && currySymbols[i].squiggle) {
+                    drawNegative(i, 145);
+                }
+                else drawNegative(i, 70);
             }
-            else if (currySymbols[i].neg) {
-                drawNegative(i, false);
-            }
-            else if (currySymbols[i].squiggle) {
+            if (currySymbols[i].squiggle) {
                 drawSquiggle(i);
             }
             else if (currySymbols[i].halo) {
