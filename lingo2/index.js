@@ -201,7 +201,7 @@ function drawDots(count, i) {
             else if (j == 1) offset = -5;
             else if (j == 2) offset = 25;
         }
-        drawFuncD(4, 3, i, lingo2image, offset);
+        drawFuncD(4, 3, j, lingo2image, offset);
     }
 }
 
