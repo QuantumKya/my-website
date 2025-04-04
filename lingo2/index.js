@@ -201,6 +201,12 @@ function drawDots(count, i) {
             else if (j == 1) offset = 0;
             else if (j == 2) offset = 30;
         }
+        else if (count == 4) {
+            if (j == 0) offset = -45;
+            else if (j == 1) offset = -15;
+            else if (j == 2) offset = 15;
+            else if (j == 3) offset = 45;
+        }
         drawFuncD(4, 3, i, lingo2image, offset);
     }
 }
@@ -218,11 +224,11 @@ function drawIcon(name, index) {
 }
 
 
-function symbolDraw(text, index) {
+function symbolDraw(proc, index) {
     ctx.fillStyle = "white";
     ctx.font = "132px Symbolingo";
     ctx.textAlign = "center";
-    ctx.fillText(text, symbolX + getOffset(index) + 44, symbolY + 88);
+    ctx.fillText(proc.t, symbolX + getOffset(index) + 44 + proc.bumpR, symbolY + 88);
 }
 
 function symbolProc(name, dots, extraC = '') {
@@ -236,7 +242,7 @@ function symbolProc(name, dots, extraC = '') {
         if (dots > 0) text = symbolDict[name] + String.fromCharCode(787 + parseInt(dots)) + extraC;
         else text = symbolDict[name] + extraC;
     }
-    return text;
+    return {t: text, bumpR: (dots == 2) ? 27 : 0};
 }
 
 function symbolIcon(name, index, dots) {
@@ -330,7 +336,7 @@ function setGlyphs(isNew = false) {
         const dotCount = document.createElement("input");
         dotCount.type = "number";
         dotCount.min = 0;
-        dotCount.max = 3;
+        dotCount.max = 4;
         dotCount.id = `dot-${i}`;
         const dotLabel = document.createElement("label");
         dotLabel.htmlFor = `dot-${i}`;
