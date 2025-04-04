@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="../main.css" type="text/css">
+
+    <script src="https://kit.fontawesome.com/332620eb80.js" crossorigin="anonymous"></script>
+
+    <script src="../sidebar.js"></script>
+    <script src="../header.js"></script> <!-- Header Import -->
+
+    <link rel="stylesheet" href="../sidebar.css" type="text/css">
+
+    <link rel="stylesheet" href="main.css" type="text/css">
+
+    <title>Lingo 2 Puzzle Viewer</title>
+
+
+    <script src="slideshow.js" defer></script>
+</head>
+<body>
+
+    <sidebar-sub-component></sidebar-sub-component>
+
+    <span>
+        <h1 id="htitle">Lingo 2 Puzzle Viewer</h1>
+        <p id="ptitle">by QuantumKya</p>
+    </span>
+
+    <div id="main">
+
+        <div id="img-holder" style="display: none;">
+            <img id="lingo2icons" src="./lingo2icons.png" height="40px" width="40px">
+            <img id="customicons" src="./customicons.png" height="40px" width="40px">
+            <img id="alphabet" src="./alphabet.png" height="40px" width="40px">
+            <canvas id="kansas" width="500px" height="500px" style="image-rendering: pixelated;"></canvas>
+        </div>
+        
+        <div id="big-row">
+        
+            <div id="forms">
+                <label for="chainfile">Puzzle File</label>
+                <input type="file" id="chainfile">
+                <button onclick="LoadPuzzleFile()" style="width: fit-content;">Upload</button>
+
+                <hr style="opacity: 0;">
+
+                <label for="64file">Puzzle Base64</label>
+                <input type="text" id="64file" style="width: fit-content;">
+                <button onclick="LoadPuzzle64()" style="width: fit-content;">Upload</button>
+
+                <hr style="opacity: 0;">
+
+                <span style="width: 400px;">
+                    <h2>Instructions!!! :3</h2>
+                    <p>Step 1. Make a puzzle in <a href="./index.html" style="text-decoration: none;">Lingo Maker 2</a></p>
+                    <p>Step 2. Press the copy button</p>
+                    <p>Step 3. Share your puzzle for people to solve!</p>
+                    <p>Step Extra. If you want to make a set of puzzles, make them all, copy their data, and put them in a .txt file, in the order you want. Then share !</p>
+                </span>
+            </div>
+
+            <div id="slideshower">
+                <img id="currentslide" width="500px" height="500px" style="image-rendering: pixelated;">
+                <div id="slideinfo">
+                    <p id="slideindex">0/0</p>
+                </div>
+            </div>
+
+            <div id="info">
+                <h3>Welcome to Lingo 2 Puzzle Viewer !</h3>
+                <p>Just upload a file (should be .txt) or paste in base64, and you have a puzzle to play!</p>
+                <p>Press left and right to change which panel you're looking at.</p>
+                <div style="font-size: 120%; display: flex; gap: 5px;">
+                    <p>Sprites used made by GabeyK9. @</p>
+                    <p>Additional custom sprites by me.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    
+    <footer-component></footer-component>
+
+</body>
+</html>
