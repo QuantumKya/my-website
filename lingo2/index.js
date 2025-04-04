@@ -258,9 +258,9 @@ dotter.onchange = (event) => {
 }
 
 var currySymbols = [];
-
-function setGlyphs() {
-    currySymbols = [];
+function setGlyphs(isNew = false) {
+    container.innerHTML = "";
+    if (isNew) currySymbols = [];
     for (let i = 0; i < symbolCount; i++) {
         const theSpan = document.createElement("span");
         theSpan.classList.add("symbol-custom");
@@ -345,7 +345,7 @@ function setGlyphs() {
         theSpan.appendChild(dotSpan);
 
         container.appendChild(theSpan);
-        currySymbols[i] = {name: "sundae", neg: false, squiggle: false, halo: false, tuna: false, dots: 0};
+        if (isNew) currySymbols[i] = {name: "sundae", neg: false, squiggle: false, halo: false, tuna: false, dots: 0};
     }
 
     for (let i = 0; i < symbolCount; i++) {
@@ -373,9 +373,7 @@ function setGlyphs() {
 numSelect.onchange = (event) => {
     console.log(event.target.value);
     symbolCount = event.target.value;
-    container.innerHTML = "";
-
-    setGlyphs();
+    setGlyphs(true);
 };
 
 var topText = "";
@@ -397,7 +395,7 @@ function DataBase64() {
         symbolArr: currySymbols,
         dotted: dottedPuzzle,
         pixelMode: pixeled
-    }
+    };
     navigator.clipboard.writeText(btoa(JSON.stringify(data)));
     alert("Puzzle copied to clipboard!");
 }
@@ -431,37 +429,37 @@ function update() {
     for (let i = 0; i < currySymbols.length; i++) {
         if (pixeled) {
             if (currySymbols[i].squiggle && currySymbols[i].neg) {
-                drawNegative(i, 85);
                 symbolY = 225;
+                drawNegative(i, 85);
             }
             else if ((currySymbols[i].halo || currySymbols[i].tuna) && currySymbols[i].neg) {
+                symbolY = 225;
                 drawNegative(i, 115);
                 if (currySymbols[i].halo) drawHalo(i);
-                symbolY = 225;
             }
             else if (currySymbols[i].neg) {
-                drawNegative(i);
                 symbolY = 225;
+                drawNegative(i, 85);
             }
             else if (currySymbols[i].squiggle && currySymbols[i].halo) {
-                drawHalo(i, 85);
                 symbolY = 225;
+                drawHalo(i, 85);
             }
             else if (currySymbols[i].tuna && currySymbols[i].halo) {
-                drawHalo(i, 115);
                 symbolY = 225;
+                drawHalo(i, 115);
             }
             else if (currySymbols[i].halo) {
-                drawHalo(i);
                 symbolY = 225;
+                drawHalo(i);
             }
             if (currySymbols[i].squiggle) {
-                drawSquiggle(i);
                 symbolY = 225;
+                drawSquiggle(i);
             }
             else if (currySymbols[i].tuna) {
-                drawTuna(i);
                 symbolY = 225;
+                drawTuna(i);
             }
             else symbolY = 210;
             drawDots(currySymbols[i].dots, i);
@@ -471,21 +469,22 @@ function update() {
         else {
             let dots = currySymbols[i].dots;
             if (currySymbols[i].neg && currySymbols[i].squiggle) {
-                symbolSquigation(currySymbols[i].name, i, dots);
                 symbolY = 225;
+                symbolSquigation(currySymbols[i].name, i, dots);
             }
             else if (currySymbols[i].neg) {
-                symbolNegate(currySymbols[i].name, i, dots);
                 symbolY = 225;
+                symbolNegate(currySymbols[i].name, i, dots);
             }
             else if (currySymbols[i].squiggle) {
-                symbolSquiggle(currySymbols[i].name, i, dots);
                 symbolY = 225;
+                symbolSquiggle(currySymbols[i].name, i, dots);
             }
             else {
-                symbolIcon(currySymbols[i].name, i, dots);
                 symbolY = 210;
+                symbolIcon(currySymbols[i].name, i, dots);
             }
+            symbolY = 210;
         }
     }
 
