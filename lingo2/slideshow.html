@@ -18,6 +18,8 @@
 
 
     <script src="slideshow.js" defer></script>
+
+    <link rel="preload" href="./LingoSymbol.ttf" as="font" type="font/ttf" crossorigin="anonymous">
 </head>
 <body>
 
@@ -42,13 +44,13 @@
             <div id="forms">
                 <label for="chainfile">Puzzle File</label>
                 <input type="file" id="chainfile">
-                <button onclick="LoadPuzzleFile()" style="width: fit-content;">Upload</button>
+                <button onclick="document.fonts.ready.then(() => {LoadPuzzleFile()})" style="width: fit-content;">Upload</button>
 
                 <hr style="opacity: 0;">
 
                 <label for="64file">Puzzle Base64</label>
                 <input type="text" id="64file" style="width: fit-content;">
-                <button onclick="LoadPuzzle64()" style="width: fit-content;">Upload</button>
+                <button onclick="document.fonts.ready.then(() => {LoadPuzzle64()})" style="width: fit-content;">Upload</button>
 
                 <hr style="opacity: 0;">
 

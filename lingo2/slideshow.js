@@ -89,44 +89,44 @@ function getOffset(i, symbolCount) {
 }
 
 
-let finalData = [];
-let totalSlides = 0;
-let currentSlideIndex = 0;
+var finalData = [];
+var totalSlides = 0;
+var currentSlideIndex = 0;
 
-let symbolX = 210;
-let symbolY = 210;
-function drawFunc(x, y, i, map, dataObj) {
+var symbolX = 210;
+var symbolY = 210;
+function drawFunc(x, y, i, map) {
     ctx.drawImage(map,
         x * 8,
         y * 8,
         8, 8,
-        symbolX + getOffset(i, dataObj.symbolCount),
+        symbolX + getOffset(i, finalData[currentSlideIndex].symbolCount),
         symbolY,
         104, 104
     );
 }
-function drawFuncO(x, y, i, map, offset, dataObj) {
+function drawFuncO(x, y, i, map, offset) {
     ctx.drawImage(map,
         x * 8,
         y * 8,
         8, 8,
-        symbolX + getOffset(i, dataObj.symbolCount),
+        symbolX + getOffset(i, finalData[currentSlideIndex].symbolCount),
         symbolY + offset,
         104, 104
     );
 }
-function drawFuncD(x, y, i, map, offset, dataObj) {
+function drawFuncD(x, y, i, map, offset) {
     ctx.drawImage(map,
         x * 8,
         y * 8,
         8, 8,
-        symbolX + getOffset(i, dataObj.symbolCount) + offset,
+        symbolX + getOffset(i, finalData[currentSlideIndex].symbolCount) + offset,
         symbolY + 70,
         104, 104
     );
 }
 
-function draw(x, y, i, c, dataObj) {
+function draw(x, y, i, c) {
     let map;
     switch(c) {
         case 0:
@@ -142,22 +142,22 @@ function draw(x, y, i, c, dataObj) {
             map = lingo2image;
             break;
     };
-    drawFunc(x, y, i, map, dataObj);
+    drawFunc(x, y, i, map);
 }
 
-function drawNegative(i, high = 70, dataObj) {
-    drawFuncO(0, 4, i, lingo2image, -high, dataObj);
+function drawNegative(i, high = 70) {
+    drawFuncO(0, 4, i, lingo2image, -high);
 }
-function drawSquiggle(i, dataObj) {
-    drawFuncO(1, 4, i, lingo2image, -70, dataObj);
+function drawSquiggle(i) {
+    drawFuncO(1, 4, i, lingo2image, -70);
 }
-function drawHalo(i, high = 70, dataObj) {
-    drawFuncO(2, 0, i, customimage, -high, dataObj);
+function drawHalo(i, high = 70) {
+    drawFuncO(2, 0, i, customimage, -high);
 }
-function drawTuna(i, dataObj) {
-    drawFuncO(3, 0, i, customimage, -70, dataObj);
+function drawTuna(i) {
+    drawFuncO(3, 0, i, customimage, -70);
 }
-function drawDots(count, i, dataObj) {
+function drawDots(count, i) {
     for (let j = 0; j < count; j++) {
         let offset = 0;
         if (count == 1) {
@@ -172,28 +172,28 @@ function drawDots(count, i, dataObj) {
             else if (j == 1) offset = -5;
             else if (j == 2) offset = 25;
         }
-        drawFuncD(4, 3, i, lingo2image, offset, dataObj);
+        drawFuncD(4, 3, i, lingo2image, offset);
     }
 }
 
-function drawIcon(name, index, dataObj) {
+function drawIcon(name, index) {
     if (Object.keys(lingo2dict).includes(name)) {
-        draw(lingo2dict[name].x, lingo2dict[name].y, index, 0, dataObj);
+        draw(lingo2dict[name].x, lingo2dict[name].y, index, 0);
     } else if (Object.keys(customdict).includes(name)) {
-        draw(customdict[name].x, customdict[name].y, index, 1, dataObj);
+        draw(customdict[name].x, customdict[name].y, index, 1);
     } else if (Object.keys(letterdict).includes(name)) {
-        draw(letterdict[name].x, letterdict[name].y, index, 2, dataObj);
+        draw(letterdict[name].x, letterdict[name].y, index, 2);
     } else {
         console.error(`Icon "${name}" not found in any dictionary.`);
     }
 }
 
 
-function symbolDraw(text, index, dataObj) {
+function symbolDraw(text, index) {
     ctx.fillStyle = "white";
     ctx.font = "132px Symbolingo";
     ctx.textAlign = "center";
-    ctx.fillText(text, symbolX + getOffset(index, dataObj.symbolCount) + 44, symbolY + 88);
+    ctx.fillText(text, symbolX + getOffset(index, finalData[currentSlideIndex].symbolCount) + 44, symbolY + 88);
 }
 
 function symbolProc(name, dots, extraC = '') {
@@ -210,20 +210,18 @@ function symbolProc(name, dots, extraC = '') {
     return text;
 }
 
-function symbolIcon(name, index, dots, dataObj) {
-    symbolDraw(symbolProc(name, dots), index, dataObj);
+function symbolIcon(name, index, dots) {
+    symbolDraw(symbolProc(name, dots), index);
 }
-function symbolNegate(name, index, dots, dataObj) {
-    symbolDraw(symbolProc(name, dots, String.fromCharCode(787)), index, dataObj);
+function symbolNegate(name, index, dots) {
+    symbolDraw(symbolProc(name, dots, String.fromCharCode(787)), index);
 }
-function symbolSquiggle(name, index, dots, dataObj) {
-    symbolDraw(symbolProc(name, dots, String.fromCharCode(786)), index, dataObj);
+function symbolSquiggle(name, index, dots) {
+    symbolDraw(symbolProc(name, dots, String.fromCharCode(786)), index);
 }
-function symbolSquigation(name, index, dots, dataObj) {
-    symbolDraw(symbolProc(name, dots, String.fromCharCode(786) + String.fromCharCode(787)), index, dataObj);
+function symbolSquigation(name, index, dots) {
+    symbolDraw(symbolProc(name, dots, String.fromCharCode(786) + String.fromCharCode(787)), index);
 }
-
-var chain = false;
 
 function LoadPuzzle(data, fullObj) {
     let json = JSON.parse(atob(data));
@@ -235,10 +233,10 @@ function LoadPuzzle(data, fullObj) {
     fullObj.dottedPuzzle = json.dotted;
     fullObj.pixeled = json.pixelMode;
     fullObj.solved = false;
-    fullObj.firstLetter = false;
 }
 
-function DrawAll(dataObj, primary = false) {
+function DrawAll() {
+    const dataObj = finalData[currentSlideIndex];
     ctx.fillStyle = "gray";
     ctx.fillRect(0, 0, 500, 500);
     if (!dataObj.solved) ctx.fillStyle = "#1e5c7d";
@@ -248,59 +246,63 @@ function DrawAll(dataObj, primary = false) {
         if (dataObj.pixeled) {
             if (dataObj.curryArr[i].squiggle && dataObj.curryArr[i].neg) {
                 symbolY = 225;
-                drawNegative(i, 85, dataObj);
+                drawNegative(i, 100);
             }
-            else if ((dataObj.curryArr[i].halo || dataObj.curryArr[i].tuna) && dataObj.curryArr[i].neg) {
-                symbolY = 225;--
-                drawNegative(i, 115, dataObj);
-                if (dataObj.curryArr[i].halo) drawHalo(i, 70, dataObj);
+            else if (dataObj.curryArr[i].tuna && dataObj.curryArr[i].neg) {
+                symbolY = 225;
+                drawNegative(i, 115);
+            }
+            else if (dataObj.curryArr[i].halo && dataObj.curryArr[i].neg) {
+                symbolY = 225;
+                drawNegative(i, 115);
+                drawHalo(i);
             }
             else if (dataObj.curryArr[i].neg) {
                 symbolY = 225;
-                drawNegative(i, 85, dataObj);
+                drawNegative(i, 85);
             }
             else if (dataObj.curryArr[i].squiggle && dataObj.curryArr[i].halo) {
                 symbolY = 225;
-                drawHalo(i, 85, dataObj);
+                drawHalo(i, 100);
             }
             else if (dataObj.curryArr[i].tuna && dataObj.curryArr[i].halo) {
                 symbolY = 225;
-                drawHalo(i, 115, dataObj);
+                drawHalo(i, 115);
             }
             else if (dataObj.curryArr[i].halo) {
                 symbolY = 225;
-                drawHalo(i, 70, dataObj);
+                drawHalo(i);
             }
+            else symbolY = 210;
             if (dataObj.curryArr[i].squiggle) {
                 symbolY = 225;
-                drawSquiggle(i, dataObj);
+                drawSquiggle(i);
             }
             else if (dataObj.curryArr[i].tuna) {
                 symbolY = 225;
-                drawTuna(i, dataObj);
+                drawTuna(i);
             }
-            else symbolY = 210;
-            drawDots(dataObj.curryArr[i].dots, i, dataObj);
-            drawIcon(dataObj.curryArr[i].name, i, dataObj);
+            drawDots(dataObj.curryArr[i].dots, i);
+            drawIcon(dataObj.curryArr[i].name, i);
             symbolY = 210;
         }
         else {
             let dots = dataObj.curryArr[i].dots;
             if (dataObj.curryArr[i].neg && dataObj.curryArr[i].squiggle) {
                 symbolY = 225;
-                symbolSquigation(dataObj.curryArr[i].name, i, dots, dataObj);
+                symbolSquigation(dataObj.curryArr[i].name, i, dots);
             }
             else if (dataObj.curryArr[i].neg) {
                 symbolY = 225;
-                symbolNegate(dataObj.curryArr[i].name, i, dots, dataObj);
+                symbolNegate(dataObj.curryArr[i].name, i, dots);
             }
             else if (dataObj.curryArr[i].squiggle) {
                 symbolY = 225;
-                symbolSquiggle(dataObj.curryArr[i].name, i, dots, dataObj);
+                symbolSquiggle(dataObj.curryArr[i].name, i, dots);
             }
             else {
                 symbolY = 210;
-                symbolIcon(dataObj.curryArr[i].name, i, dots, dataObj);
+                symbolIcon(dataObj.curryArr[i].name, i, dots);
             }
             symbolY = 210;
         }
@@ -382,7 +384,7 @@ function LoadPuzzle64() {
     currentSlideIndex = 0;
     totalSlides = 1;
     const b64 = base64text.value;
-    finalData = {
+    finalData[0] = {
         topText: "",
         ans: "",
         btmText: "",
@@ -392,12 +394,11 @@ function LoadPuzzle64() {
         pixeled: false,
         solved: false
     };
-    LoadPuzzle(b64, finalData);
-    DrawAll(finalData);
+    LoadPuzzle(b64, finalData[0]);
+    DrawAll(finalData[0]);
     const slide = new Image();
     slide.src = canvas.toDataURL("image/png");
     images[0] = slide.src;
-    currentSlideIndex = 0;
 
     slideNumber.innerHTML = `${currentSlideIndex+1}/${totalSlides}`;
     currentSlide.src = images[0];
@@ -406,19 +407,11 @@ function LoadPuzzle64() {
 
 var currentChar = 0;
 
-function updatePanel(index) {
-    if (singleMode) {
-        DrawAll(finalData);
-        const updatedSlide = new Image();
-        updatedSlide.src = canvas.toDataURL("image/png");
-        images[0] = updatedSlide.src;
-    }
-    else {
-        DrawAll(finalData[index]);
-        const updatedSlide = new Image();
-        updatedSlide.src = canvas.toDataURL("image/png");
-        images[index] = updatedSlide.src;
-    }
+function updatePanel() {
+    DrawAll();
+    const updatedSlide = new Image();
+    updatedSlide.src = canvas.toDataURL("image/png");
+    images[currentSlideIndex] = updatedSlide.src;
 }
 
 document.addEventListener('keydown', (event) => {
@@ -426,67 +419,41 @@ document.addEventListener('keydown', (event) => {
         if (event.code == 'ArrowRight') {
             currentSlideIndex += 1;
             if (currentSlideIndex == totalSlides) currentSlideIndex = 0;
+            updatePanel();
         }
         else if (event.code == 'ArrowLeft') {
             currentSlideIndex -= 1;
             if (currentSlideIndex == -1) currentSlideIndex = totalSlides - 1;
+            updatePanel();
         }
     }
 
+    const dataObj = finalData[currentSlideIndex];
     const key = event.key;
-    if (singleMode) {
-        if (event.code.startsWith('Key') || event.code === 'Space') {
-            let bT = finalData.btmText;
-            finalData.btmText = bT.slice(0, currentChar) + key + bT.slice(currentChar + 1);
-            if (currentChar < finalData.ans.length - 1) currentChar += 1;
-            if (finalData.btmText == finalData.ans) {
-                finalData.solved = true;
-            }
-            else {
-                finalData.solved = false;
-            }
-            updatePanel(0);
+    if (event.code.startsWith('Key') || event.code === 'Space') {
+        let bT = dataObj.btmText;
+        dataObj.btmText = bT.slice(0, currentChar) + key + bT.slice(currentChar + 1);
+        if (currentChar < dataObj.ans.length - 1) currentChar += 1;
+        if (dataObj.btmText == dataObj.ans) {
+            dataObj.solved = true;
         }
-        else if (event.code === 'Backspace') {
-            let bT = finalData.btmText;
-            finalData.btmText = bT.slice(0, currentChar) + '-' + bT.slice(currentChar + 1);
-            if (currentChar >= 1) currentChar -= 1;
-            finalData.solved = false;
-            updatePanel(0);
+        else {
+            dataObj.solved = false;
         }
-        
-        if (event.code === 'CapsLock') {
-            finalData.btmText = finalData.ans[0] + finalData.btmText.slice(1);
-            currentChar = 1;
-            updatePanel(0);
-        }
+        updatePanel();
     }
-    else {
-        if (event.code.startsWith('Key') || event.code === 'Space') {
-            let bT = finalData[currentSlideIndex].btmText;
-            finalData[currentSlideIndex].btmText = bT.slice(0, currentChar) + key + bT.slice(currentChar + 1);
-            if (currentChar < finalData[currentSlideIndex].ans.length - 1) currentChar += 1;
-            if (finalData[currentSlideIndex].btmText == finalData[currentSlideIndex].ans) {
-                finalData[currentSlideIndex].solved = true;
-            }
-            else {
-                finalData[currentSlideIndex].solved = false;
-            }
-            updatePanel(currentSlideIndex);
-        }
-        else if (event.code === 'Backspace') {
-            let bT = finalData[currentSlideIndex].btmText;
-            finalData[currentSlideIndex].btmText = bT.slice(0, currentChar) + '-' + bT.slice(currentChar + 1);
-            if (currentChar >= 1) currentChar -= 1;
-            finalData[currentSlideIndex].solved = false;
-            updatePanel(currentSlideIndex);
-        }
+    else if (event.code === 'Backspace') {
+        let bT = dataObj.btmText;
+        dataObj.btmText = bT.slice(0, currentChar) + '-' + bT.slice(currentChar + 1);
+        if (currentChar >= 1) currentChar -= 1;
+        dataObj.solved = false;
+        updatePanel();
+    }
 
-        if (event.code === 'CapsLock') {
-            finalData[currentSlideIndex].btmText = finalData[currentSlideIndex].ans[0] + finalData[currentSlideIndex].btmText.slice(1);
-            currentChar = 1;
-            updatePanel(currentSlideIndex);
-        }
+    if (event.code === 'CapsLock') {
+        dataObj.btmText = dataObj.ans[0] + dataObj.btmText.slice(1);
+        currentChar = 1;
+        updatePanel();
     }
 
     slideNumber.innerHTML = `${currentSlideIndex+1}/${totalSlides}`;
