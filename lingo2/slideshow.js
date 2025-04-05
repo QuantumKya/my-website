@@ -435,7 +435,7 @@ document.addEventListener('keydown', (event) => {
         let bT = dataObj.btmText;
         dataObj.btmText = bT.slice(0, dataObj.currentChar) + key + bT.slice(dataObj.currentChar + 1);
         if (dataObj.currentChar < dataObj.ans.length - 1) dataObj.currentChar += 1;
-        if (dataObj.btmText == dataObj.ans) {
+        if (dataObj.btmText == dataObj.ans && !dataObj.solved) {
             dataObj.solved = true;
             correctCount += 1;
         }
