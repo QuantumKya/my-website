@@ -350,9 +350,8 @@ async function LoadPuzzleFile() {
     totalSlides = 0;
     const file = fileLoader.files[0];
     let text = await file.text();
-    text = text.split("\n").join(" ");
-    let data = text.split(" ");
-    totalSlides = data.length - 1;
+    let data = text.trim().split("\n"); // Trim and split by lines
+    totalSlides = data.length;
 
     finalData = [];
     for (let i = 0; i < data.length; i++) {
@@ -367,12 +366,11 @@ async function LoadPuzzleFile() {
             solved: false
         };
         LoadPuzzle(data[i], finalData[i]);
-        DrawAll(finalData[i], (i == 0));
+        DrawAll();
         const slide = new Image();
         slide.src = canvas.toDataURL("image/png");
         images[i] = slide.src;
     }
-    chain = data[data.length - 1] == 0 ? false : true;
 
     slideNumber.innerHTML = `${currentSlideIndex+1}/${totalSlides}`;
     currentSlide.src = images[currentSlideIndex];
