@@ -224,6 +224,7 @@ function symbolSquigation(name, index, dots) {
 }
 
 function LoadPuzzle(data, fullObj) {
+    currentChar = 0;
     let json = JSON.parse(atob(data));
     fullObj.topText = json.clue;
     fullObj.ans = json.answer;
