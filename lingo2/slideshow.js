@@ -410,6 +410,7 @@ function updatePanel() {
     const updatedSlide = new Image();
     updatedSlide.src = canvas.toDataURL("image/png");
     images[currentSlideIndex] = updatedSlide.src;
+    currentChar = 0;
 }
 
 document.addEventListener('keydown', (event) => {
