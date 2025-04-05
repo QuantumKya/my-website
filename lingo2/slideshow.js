@@ -10,6 +10,7 @@ const alphabet = document.getElementById("alphabet");
 
 const currentSlide = document.getElementById("currentslide");
 const slideNumber = document.getElementById("slideindex");
+const correctNumber = document.getElementById("correctcount");
 const imageHolder = document.getElementById("imageholder");
 
 var lingo2dict = {};
@@ -233,6 +234,7 @@ function LoadPuzzle(data, fullObj) {
     fullObj.dottedPuzzle = json.dotted;
     fullObj.pixeled = json.pixelMode;
     fullObj.solved = false;
+    fullObj.currentChar = 0;
 }
 
 function DrawAll() {
@@ -348,7 +350,6 @@ async function LoadPuzzleFile() {
     singleMode = false;
     currentSlideIndex = 0;
     totalSlides = 0;
-    currentChar = 0;
     const file = fileLoader.files[0];
     let text = await file.text();
     let data = text.trim().split("\n"); // Trim and split by lines
@@ -364,7 +365,8 @@ async function LoadPuzzleFile() {
             curryArr: [],
             dottedPuzzle: false,
             pixeled: false,
-            solved: false
+            solved: false,
+            currentChar: 0,
         };
         LoadPuzzle(data[i], finalData[i]);
         DrawAll();
@@ -382,7 +384,7 @@ function LoadPuzzle64() {
     singleMode = true;
     currentSlideIndex = 0;
     totalSlides = 1;
-    currentChar = 0;
+    dataObj.currentChar = 0;
     const b64 = base64text.value;
     finalData[0] = {
         topText: "",
@@ -392,7 +394,8 @@ function LoadPuzzle64() {
         curryArr: [],
         dottedPuzzle: false,
         pixeled: false,
-        solved: false
+        solved: false,
+        currentChar: 0
     };
     LoadPuzzle(b64, finalData[0]);
     DrawAll(finalData[0]);
@@ -405,27 +408,26 @@ function LoadPuzzle64() {
     currentSlide.style.display = "block";
 }
 
-var currentChar = 0;
-
-function updatePanel(switching = false) {
+function updatePanel() {
     DrawAll();
     const updatedSlide = new Image();
     updatedSlide.src = canvas.toDataURL("image/png");
     images[currentSlideIndex] = updatedSlide.src;
-    if (switching) currentChar = 0;
 }
+
+var correctCount = 0;
 
 document.addEventListener('keydown', (event) => {
     if (!singleMode) {
         if (event.code == 'ArrowRight') {
             currentSlideIndex += 1;
             if (currentSlideIndex == totalSlides) currentSlideIndex = 0;
-            updatePanel(true);
+            updatePanel();
         }
         else if (event.code == 'ArrowLeft') {
             currentSlideIndex -= 1;
             if (currentSlideIndex == -1) currentSlideIndex = totalSlides - 1;
-            updatePanel(true);
+            updatePanel();
         }
     }
 
@@ -433,31 +435,37 @@ document.addEventListener('keydown', (event) => {
     const key = event.key;
     if (event.code.startsWith('Key') || event.code === 'Space') {
         let bT = dataObj.btmText;
-        dataObj.btmText = bT.slice(0, currentChar) + key + bT.slice(currentChar + 1);
-        if (currentChar < dataObj.ans.length - 1) currentChar += 1;
+        dataObj.btmText = bT.slice(0, dataObj.currentChar) + key + bT.slice(dataObj.currentChar + 1);
+        if (dataObj.currentChar < dataObj.ans.length - 1) dataObj.currentChar += 1;
         if (dataObj.btmText == dataObj.ans) {
             dataObj.solved = true;
+            correctCount += 1;
         }
         else {
+            if (dataObj.solved) correctCount -= 1;
             dataObj.solved = false;
         }
         updatePanel();
     }
     else if (event.code === 'Backspace') {
         let bT = dataObj.btmText;
-        dataObj.btmText = bT.slice(0, currentChar) + '-' + bT.slice(currentChar + 1);
-        if (currentChar >= 1) currentChar -= 1;
-        dataObj.solved = false;
+        dataObj.btmText = bT.slice(0, dataObj.currentChar) + '-' + bT.slice(dataObj.currentChar + 1);
+        if (dataObj.currentChar >= 1) dataObj.currentChar -= 1;
+        if (dataObj.solved) {
+            correctCount -= 1;
+            dataObj.solved = false;
+        }
         updatePanel();
     }
 
     if (event.code === 'CapsLock') {
         dataObj.btmText = dataObj.ans[0] + dataObj.btmText.slice(1);
-        currentChar = 1;
+        dataObj.currentChar = 1;
         updatePanel();
     }
 
     slideNumber.innerHTML = `${currentSlideIndex+1}/${totalSlides}`;
+    correctNumber.innerHTML = `Correct: ${correctCount}/${totalSlides}`;
     currentSlide.src = images[currentSlideIndex];
     currentSlide.style.display = "block";
 });
