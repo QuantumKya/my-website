@@ -269,7 +269,7 @@ function DrawAll(dataObj, primary = false) {
             }
             else if (dataObj.curryArr[i].halo) {
                 symbolY = 225;
-                drawHalo(i, dataObj);
+                drawHalo(i, 70, dataObj);
             }
             if (dataObj.curryArr[i].squiggle) {
                 symbolY = 225;
