@@ -449,8 +449,8 @@ document.addEventListener('keydown', (event) => {
     }
     else if (event.code === 'Backspace') {
         let bT = dataObj.btmText;
+        if (dataObj.currentChar >= 1 && bT[dataObj.currentChar] == '-') dataObj.currentChar -= 1;
         dataObj.btmText = bT.slice(0, dataObj.currentChar) + '-' + bT.slice(dataObj.currentChar + 1);
-        if (dataObj.currentChar >= 1) dataObj.currentChar -= 1;
         if (dataObj.solved) {
             correctCount -= 1;
             dataObj.solved = false;
