@@ -253,7 +253,7 @@ function DrawAll(dataObj, primary = false) {
             else if ((dataObj.curryArr[i].halo || dataObj.curryArr[i].tuna) && dataObj.curryArr[i].neg) {
                 symbolY = 225;--
                 drawNegative(i, 115, dataObj);
-                if (dataObj.curryArr[i].halo) drawHalo(i, dataObj);
+                if (dataObj.curryArr[i].halo) drawHalo(i, 70, dataObj);
             }
             else if (dataObj.curryArr[i].neg) {
                 symbolY = 225;
