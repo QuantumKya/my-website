@@ -189,11 +189,11 @@ function drawIcon(name, index, dataObj) {
 }
 
 
-function symbolDraw(text, index) {
+function symbolDraw(text, index, dataObj) {
     ctx.fillStyle = "white";
     ctx.font = "132px Symbolingo";
     ctx.textAlign = "center";
-    ctx.fillText(text, symbolX + getOffset(index) + 44, symbolY + 88);
+    ctx.fillText(text, symbolX + getOffset(index, dataObj.symbolCount) + 44, symbolY + 88);
 }
 
 function symbolProc(name, dots, extraC = '') {
@@ -210,17 +210,17 @@ function symbolProc(name, dots, extraC = '') {
     return text;
 }
 
-function symbolIcon(name, index, dots) {
-    symbolDraw(symbolProc(name, dots), index);
+function symbolIcon(name, index, dots, dataObj) {
+    symbolDraw(symbolProc(name, dots), index, dataObj);
 }
-function symbolNegate(name, index, dots) {
-    symbolDraw(symbolProc(name, dots, String.fromCharCode(787)), index);
+function symbolNegate(name, index, dots, dataObj) {
+    symbolDraw(symbolProc(name, dots, String.fromCharCode(787)), index, dataObj);
 }
-function symbolSquiggle(name, index, dots) {
-    symbolDraw(symbolProc(name, dots, String.fromCharCode(786)), index);
+function symbolSquiggle(name, index, dots, dataObj) {
+    symbolDraw(symbolProc(name, dots, String.fromCharCode(786)), index, dataObj);
 }
-function symbolSquigation(name, index, dots) {
-    symbolDraw(symbolProc(name, dots, String.fromCharCode(786) + String.fromCharCode(787)), index);
+function symbolSquigation(name, index, dots, dataObj) {
+    symbolDraw(symbolProc(name, dots, String.fromCharCode(786) + String.fromCharCode(787)), index, dataObj);
 }
 
 var chain = false;
@@ -288,19 +288,19 @@ function DrawAll(dataObj, primary = false) {
             let dots = dataObj.curryArr[i].dots;
             if (dataObj.curryArr[i].neg && dataObj.curryArr[i].squiggle) {
                 symbolY = 225;
-                symbolSquigation(dataObj.curryArr[i].name, i, dots);
+                symbolSquigation(dataObj.curryArr[i].name, i, dots, dataObj);
             }
             else if (dataObj.curryArr[i].neg) {
                 symbolY = 225;
-                symbolNegate(dataObj.curryArr[i].name, i, dots);
+                symbolNegate(dataObj.curryArr[i].name, i, dots, dataObj);
             }
             else if (dataObj.curryArr[i].squiggle) {
                 symbolY = 225;
-                symbolSquiggle(dataObj.curryArr[i].name, i, dots);
+                symbolSquiggle(dataObj.curryArr[i].name, i, dots, dataObj);
             }
             else {
                 symbolY = 210;
-                symbolIcon(dataObj.curryArr[i].name, i, dots);
+                symbolIcon(dataObj.curryArr[i].name, i, dots, dataObj);
             }
             symbolY = 210;
         }
@@ -341,6 +341,7 @@ function DrawAll(dataObj, primary = false) {
 
 const images = [];
 
+var singleMode = false;
 async function LoadPuzzleFile() {
     singleMode = false;
     currentSlideIndex = 0;
@@ -352,7 +353,7 @@ async function LoadPuzzleFile() {
     totalSlides = data.length - 1;
 
     finalData = [];
-    for (let i = 0; i < data.length - 1; i++) {
+    for (let i = 0; i < data.length; i++) {
         finalData[i] = {
             topText: "",
             ans: "",
@@ -376,7 +377,6 @@ async function LoadPuzzleFile() {
     currentSlide.style.display = "block";
 }
 
-var singleMode = false;
 function LoadPuzzle64() {
     singleMode = true;
     currentSlideIndex = 0;
