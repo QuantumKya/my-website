@@ -407,12 +407,12 @@ function LoadPuzzle64() {
 
 var currentChar = 0;
 
-function updatePanel() {
+function updatePanel(switching = false) {
     DrawAll();
     const updatedSlide = new Image();
     updatedSlide.src = canvas.toDataURL("image/png");
     images[currentSlideIndex] = updatedSlide.src;
-    currentChar = 0;
+    if (switching) currentChar = 0;
 }
 
 document.addEventListener('keydown', (event) => {
@@ -420,12 +420,12 @@ document.addEventListener('keydown', (event) => {
         if (event.code == 'ArrowRight') {
             currentSlideIndex += 1;
             if (currentSlideIndex == totalSlides) currentSlideIndex = 0;
-            updatePanel();
+            updatePanel(true);
         }
         else if (event.code == 'ArrowLeft') {
             currentSlideIndex -= 1;
             if (currentSlideIndex == -1) currentSlideIndex = totalSlides - 1;
-            updatePanel();
+            updatePanel(true);
         }
     }
 
