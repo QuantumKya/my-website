@@ -224,7 +224,6 @@ function symbolSquigation(name, index, dots) {
 }
 
 function LoadPuzzle(data, fullObj) {
-    currentChar = 0;
     let json = JSON.parse(atob(data));
     fullObj.topText = json.clue;
     fullObj.ans = json.answer;
@@ -349,6 +348,7 @@ async function LoadPuzzleFile() {
     singleMode = false;
     currentSlideIndex = 0;
     totalSlides = 0;
+    currentChar = 0;
     const file = fileLoader.files[0];
     let text = await file.text();
     let data = text.trim().split("\n"); // Trim and split by lines
@@ -382,6 +382,7 @@ function LoadPuzzle64() {
     singleMode = true;
     currentSlideIndex = 0;
     totalSlides = 1;
+    currentChar = 0;
     const b64 = base64text.value;
     finalData[0] = {
         topText: "",
