@@ -19,7 +19,7 @@ var letterdict = {};
 var symbolDict = {};
 function setNames() {
     let newDict = {};
-    for (let i = 0; i < 23; i++) {
+    for (let i = 0; i < 24; i++) {
         let row = Math.floor(i / 5);
         let column = i % 5;
         newDict[arguments[i]] = {x: column, y: row};
@@ -27,28 +27,27 @@ function setNames() {
     lingo2dict = newDict;
 
     newDict = {};
-    for (let i = 23; i < 49; i++) {
-        let row = Math.floor((i - 23) / 5);
-        let column = (i - 23) % 5;
+    for (let i = 24; i < 50; i++) {
+        let row = Math.floor((i - 24) / 5);
+        let column = (i - 24) % 5;
         newDict[arguments[i]] = {x: column, y: row};
     }
     letterdict = newDict;
 
     newDict = {};
-    for (let i = 49; i < arguments.length; i++) {
-        let row = Math.floor((i - 49) / 5);
-        let column = (i - 49) % 5;
+    for (let i = 50; i < arguments.length; i++) {
+        let row = Math.floor((i - 50) / 5);
+        let column = (i - 50) % 5;
         newDict[arguments[i]] = {x: column, y: row};
     }
     customdict = newDict;
 
     newDict = {};
-    for (let i = 0; i < 23; i++) {
+    for (let i = 0; i < 24; i++) {
         newDict[arguments[i]] = String.fromCharCode(97 + i);
     }
-    newDict[arguments[22]] = 't';
-    for (let i = 23; i < 49; i++) {
-        newDict[arguments[i]] = String.fromCharCode(65 + (i - 23));
+    for (let i = 24; i < 50; i++) {
+        newDict[arguments[i]] = String.fromCharCode(65 + (i - 24));
     }
     symbolDict = newDict;
 }
@@ -58,7 +57,7 @@ setNames(
     "quake", "saturn", "magenta", "cross", "starstruck",
     "nullset", "scramble", "speaker", "northernlights", "smiley",
     "ultrahand", "pinky", "pinkie (pie)", "questionmark",
-    "dot", "braket", "squiggle", "empty",
+    "dot", "braket", "squiggle", "divider", "empty",
 
     "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
 

@@ -50,7 +50,7 @@ var symbolDict = {};
 
 function setNames() {
     let newDict = {};
-    for (let i = 0; i < 23; i++) {
+    for (let i = 0; i < 24; i++) {
         let row = Math.floor(i / 5);
         let column = i % 5;
         newDict[arguments[i]] = {x: column, y: row};
@@ -58,28 +58,27 @@ function setNames() {
     lingo2dict = newDict;
 
     newDict = {};
-    for (let i = 23; i < 49; i++) {
-        let row = Math.floor((i - 23) / 5);
-        let column = (i - 23) % 5;
+    for (let i = 24; i < 50; i++) {
+        let row = Math.floor((i - 24) / 5);
+        let column = (i - 24) % 5;
         newDict[arguments[i]] = {x: column, y: row};
     }
     letterdict = newDict;
 
     newDict = {};
-    for (let i = 49; i < arguments.length; i++) {
-        let row = Math.floor((i - 49) / 5);
-        let column = (i - 49) % 5;
+    for (let i = 50; i < arguments.length; i++) {
+        let row = Math.floor((i - 50) / 5);
+        let column = (i - 50) % 5;
         newDict[arguments[i]] = {x: column, y: row};
     }
     customdict = newDict;
 
     newDict = {};
-    for (let i = 0; i < 23; i++) {
+    for (let i = 0; i < 24; i++) {
         newDict[arguments[i]] = String.fromCharCode(97 + i);
     }
-    newDict[arguments[22]] = 't';
-    for (let i = 23; i < 49; i++) {
-        newDict[arguments[i]] = String.fromCharCode(65 + (i - 23));
+    for (let i = 24; i < 50; i++) {
+        newDict[arguments[i]] = String.fromCharCode(65 + (i - 24));
     }
     symbolDict = newDict;
 }
@@ -89,7 +88,7 @@ setNames(
     "quake", "saturn", "magenta", "cross", "starstruck",
     "nullset", "scramble", "speaker", "northernlights", "smiley",
     "ultrahand", "pinky", "pinkie (pie)", "questionmark",
-    "dot", "braket", "squiggle", "empty",
+    "dot", "braket", "squiggle", "divider", "empty",
 
     "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
 
@@ -344,17 +343,23 @@ function setGlyphs(isNew = false) {
         dotSpan.appendChild(dotCount);
         dotSpan.appendChild(dotLabel);
 
+        /*
+        const deleteButton = document.createElement("button");
+        deleteButton.innerHTML = "Delete Glyph";
+        */
+
         theSpan.appendChild(negateSpan);
         theSpan.appendChild(squiggleSpan);
         theSpan.appendChild(haloSpan);
         theSpan.appendChild(tunaSpan);
         theSpan.appendChild(dotSpan);
+        // theSpan.appendChild(deleteButton);
 
         container.appendChild(theSpan);
         if (isNew) currySymbols[i] = {name: "sundae", neg: false, squiggle: false, halo: false, tuna: false, dots: 0};
     }
 
-    for (let i = 0; i < symbolCount; i++) {
+    for (let i = 0; i < symbolCount-1; i++) {
         container.children[i].children[0].onchange = (event) => {
             currySymbols[i].name = event.target.value;
         };
@@ -373,8 +378,140 @@ function setGlyphs(isNew = false) {
         container.children[i].children[5].children[0].onchange = (event) => {
             currySymbols[i].dots = event.target.value;
         };
+        // container.children[i].children[6].onclick = removeGlyph(i);
     }
 }
+
+/*
+function addGlyph() {
+    symbolCount++;
+    const theSpan = document.createElement("span");
+    theSpan.classList.add("symbol-custom");
+    const select = document.createElement("select");
+    for (const key in lingo2dict) {
+        const option = document.createElement("option");
+        option.value = key;
+        option.textContent = key;
+        select.appendChild(option);
+    }
+    for (const key in customdict) {
+        const option = document.createElement("option");
+        option.value = key;
+        option.textContent = key;
+        select.appendChild(option);
+    }
+    for (const key in letterdict) {
+        const option = document.createElement("option");
+        option.value = key;
+        option.textContent = key;
+        select.appendChild(option);
+    }
+    select.id = (symbolCount - 1).toString();
+    select.onchange = (event) => {
+        currySymbols[symbolCount - 1].name = event.target.value;
+    };
+    theSpan.appendChild(select);
+
+    const negateSpan = document.createElement("span");
+    const negateCheckbox = document.createElement("input");
+    negateCheckbox.type = "checkbox";
+    negateCheckbox.id = `neg-${symbolCount - 1}`;
+    const negateLabel = document.createElement("label");
+    negateLabel.htmlFor = `neg-${symbolCount - 1}`;
+    negateLabel.textContent = "negated";
+
+    negateCheckbox.onchange = (event) => {
+        currySymbols[symbolCount - 1].neg = event.target.checked;
+    };
+    negateSpan.appendChild(negateCheckbox);
+    negateSpan.appendChild(negateLabel);
+
+    // ----------------------------------------------------
+
+    const squiggleSpan = document.createElement("span");
+    const squiggleCheckbox = document.createElement("input");
+    squiggleCheckbox.type = "checkbox";
+    squiggleCheckbox.id = `squiggle-${symbolCount - 1}`;
+    const squiggleLabel = document.createElement("label");
+    squiggleLabel.htmlFor = `squiggle-${symbolCount - 1}`;
+    squiggleLabel.textContent = "squiggle";
+
+    squiggleCheckbox.onchange = (event) => {
+        currySymbols[symbolCount - 1].squiggle = event.target.checked;
+    };
+    squiggleSpan.appendChild(squiggleCheckbox);
+    squiggleSpan.appendChild(squiggleLabel);
+
+    // ----------------------------------------------------
+
+    const haloSpan = document.createElement("span");
+    const haloCheckbox = document.createElement("input");
+    haloCheckbox.type = "checkbox";
+    haloCheckbox.id = `halo-${symbolCount - 1}`;
+    const haloLabel = document.createElement("label");
+    haloLabel.htmlFor = `halo-${symbolCount - 1}`;
+    haloLabel.textContent = "halo";
+
+    haloCheckbox.onchange = (event) => {
+        currySymbols[symbolCount - 1].halo = event.target.checked;
+    };
+    haloSpan.appendChild(haloCheckbox);
+    haloSpan.appendChild(haloLabel);
+
+    // ----------------------------------------------------
+
+    const tunaSpan = document.createElement("span");
+    const tunaCheckbox = document.createElement("input");
+    tunaCheckbox.type = "checkbox";
+    tunaCheckbox.id = `tuna-${symbolCount - 1}`;
+    const tunaLabel = document.createElement("label");
+    tunaLabel.htmlFor = `tuna-${symbolCount - 1}`;
+    tunaLabel.textContent = "tuna";
+
+    tunaCheckbox.onchange = (event) => {
+        currySymbols[symbolCount - 1].tuna = event.target.checked;
+    };
+    tunaSpan.appendChild(tunaCheckbox);
+    tunaSpan.appendChild(tunaLabel);
+
+    // ----------------------------------------------------
+
+    const dotSpan = document.createElement("span");
+    const dotCount = document.createElement("input");
+    dotCount.type = "number";
+    dotCount.min = 0;
+    dotCount.max = 4;
+    dotCount.id = `dot-${symbolCount - 1}`;
+    const dotLabel = document.createElement("label");
+    dotLabel.htmlFor = `dot-${symbolCount - 1}`;
+    dotLabel.textContent = "dots";
+
+    dotCount.onchange = (event) => {
+        currySymbols[symbolCount - 1].dots = event.target.value;
+    };
+    dotSpan.appendChild(dotCount);
+    dotSpan.appendChild(dotLabel);
+
+    // ----------------------------------------------------
+
+    theSpan.appendChild(negateSpan);
+    theSpan.appendChild(squiggleSpan);
+    theSpan.appendChild(haloSpan);
+    theSpan.appendChild(tunaSpan);
+    theSpan.appendChild(dotSpan);
+
+    container.appendChild(theSpan);
+    currySymbols.push({name: "sundae", neg: false, squiggle: false, halo: false, tuna: false, dots: 0});
+    symbolCount--;
+}
+
+function removeGlyph(index) {
+    symbolCount--;
+    currySymbols.splice(index, 1);
+    container.removeChild(container.children[index]);
+    setGlyphs();
+}
+*/
 
 numSelect.onchange = (event) => {
     console.log(event.target.value);
