@@ -359,7 +359,7 @@ function setGlyphs(isNew = false) {
         if (isNew) currySymbols[i] = {name: "sundae", neg: false, squiggle: false, halo: false, tuna: false, dots: 0};
     }
 
-    for (let i = 0; i < symbolCount-1; i++) {
+    for (let i = 0; i < symbolCount; i++) {
         container.children[i].children[0].onchange = (event) => {
             currySymbols[i].name = event.target.value;
         };
