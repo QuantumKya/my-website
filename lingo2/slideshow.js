@@ -226,7 +226,7 @@ function symbolSquigation(name, index, dots) {
 function LoadPuzzle(data, fullObj) {
     let json = JSON.parse(atob(data));
     fullObj.topText = json.clue;
-    fullObj.ans = json.answer;
+    fullObj.ans = json.answer.toLowerCase();
     fullObj.btmText = json.answer.replace(/[^\s]/g, '-');
     fullObj.symbolCount = json.symbol;
     fullObj.curryArr = json.symbolArr;
@@ -431,7 +431,7 @@ document.addEventListener('keydown', (event) => {
     }
 
     const dataObj = finalData[currentSlideIndex];
-    const key = event.key;
+    const key = event.key.toLowerCase();
     if (event.code.startsWith('Key') || event.code === 'Space') {
         let bT = dataObj.btmText;
         dataObj.btmText = bT.slice(0, dataObj.currentChar) + key + bT.slice(dataObj.currentChar + 1);
