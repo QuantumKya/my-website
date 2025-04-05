@@ -383,7 +383,6 @@ function LoadPuzzle64() {
     singleMode = true;
     currentSlideIndex = 0;
     totalSlides = 1;
-    dataObj.currentChar = 0;
     const b64 = base64text.value;
     finalData[0] = {
         topText: "",
