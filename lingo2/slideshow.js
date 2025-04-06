@@ -443,12 +443,9 @@ function ParseSmaller(data, target) {
         return;
     }
 
-    console.log(parts);
-
     target.topText = parts[0];
     target.ans = parts[1];
     target.btmText = parts[1].replace(/[^\s]/g, '-');
-    console.log(parseInt(parts[2]));
     target.symbolCount = parseInt(parts[2]);
     target.curryArr = [];
     let index = 3;
