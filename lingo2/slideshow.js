@@ -424,6 +424,28 @@ function LoadPuzzle64() {
     currentSlide.style.display = "block";
 }
 
+async function FormatData() {
+    const inputter = document.getElementById("formatter");
+    const file = inputter.files[0];
+    const data = await file.text();
+    let dataArr = data.split('\n');
+    for (let i = 0; i < dataArr.length; i++) {
+        if (dataArr[i].trim() === "") {
+            dataArr.splice(i, 1);
+            i--;
+        }
+        if (!dataArr[i].trim().startsWith("cHV6emxlcHV6emxlcHV6emxl")) {
+            let index = dataArr[i].indexOf("cHV6emxlcHV6emxlcHV6emxl");
+            dataArr[i] = dataArr[i].substring(index);
+        }
+    }
+
+    const link = document.createElement("a");
+    link.download = "formatted.txt";
+    link.href = URL.createObjectURL(new Blob([dataArr.join('\n')], { type: 'text/plain' }));
+    link.click();
+}
+
 function LoadSmaller() {
     singleMode = true;
     currentSlideIndex = 0;
