@@ -428,6 +428,7 @@ function LoadSmaller() {
     singleMode = true;
     currentSlideIndex = 0;
     totalSlides = 1;
+    correctCount = 0;
     const b64 = base64text.value;
     finalData[0] = {
         topText: "",
@@ -494,6 +495,7 @@ async function LoadSmaller64() {
     singleMode = false;
     currentSlideIndex = 0;
     totalSlides = 0;
+    correctCount = 0;
     const file = fileLoader.files[0];
     let text = await file.text();
     let data = text.trim().split("\n"); // Trim and split by lines
