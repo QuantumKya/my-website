@@ -653,14 +653,15 @@ async function convertOldNew() {
                 continue;
             }
         }
-
-        const linedata = JSON.parse(atob(olddata[i]));
-        let newline = `puzzlepuzzlepuzzle${linedata.clue}.${linedata.answer}.${linedata.symbol}.`;
-        for (symbol of linedata.symbolArr) {
-            newline += `${symbol.name}.${Number(symbol.neg)}.${Number(symbol.squiggle)}.${Number(symbol.halo)}.${Number(symbol.tuna)}.${symbol.dots}.`;
+        else {
+            const linedata = JSON.parse(atob(olddata[i]));
+            let newline = `puzzlepuzzlepuzzle${linedata.clue}.${linedata.answer}.${linedata.symbol}.`;
+            for (symbol of linedata.symbolArr) {
+                newline += `${symbol.name}.${Number(symbol.neg)}.${Number(symbol.squiggle)}.${Number(symbol.halo)}.${Number(symbol.tuna)}.${symbol.dots}.`;
+            }
+            newline += `${Number(linedata.dotted)}.${Number(linedata.pixelMode)}`;
+            olddata[i] = olddata[i].replace(/eyJjbHV.*/, btoa(newline));
         }
-        newline += `${Number(linedata.dotted)}.${Number(linedata.pixelMode)}`;
-        olddata[i] = olddata[i].replace(/eyJjbHV.*/, btoa(newline));
     }
     
     const link = document.createElement("a");
