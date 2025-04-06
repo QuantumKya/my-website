@@ -456,7 +456,7 @@ document.addEventListener('keydown', (event) => {
         updatePanel();
     }
 
-    if (event.code === 'CapsLock') {
+    if (event.code === 'CapsLock' || event.code =='Insert') {
         dataObj.btmText = dataObj.ans[0] + dataObj.btmText.slice(1);
         dataObj.currentChar = 1;
         updatePanel();
