@@ -424,6 +424,33 @@ function LoadPuzzle64() {
     currentSlide.style.display = "block";
 }
 
+function LoadSmaller() {
+    singleMode = true;
+    currentSlideIndex = 0;
+    totalSlides = 1;
+    const b64 = base64text.value;
+    finalData[0] = {
+        topText: "",
+        ans: "",
+        btmText: "",
+        symbolCount: 0,
+        curryArr: [],
+        dottedPuzzle: false,
+        pixeled: false,
+        solved: false,
+        currentChar: 0
+    };
+    ParseSmaller(b64, finalData[0]);
+    DrawAll(finalData[0]);
+    const slide = new Image();
+    slide.src = canvas.toDataURL("image/png");
+    images[0] = slide.src;
+
+    slideNumber.innerHTML = `${currentSlideIndex+1}/${totalSlides}`;
+    currentSlide.src = images[0];
+    currentSlide.style.display = "block";
+}
+
 function ParseSmaller(data, target) {
     const decodedData = atob(data);
     if (!decodedData.includes("puzzlepuzzlepuzzle")) {
@@ -540,7 +567,7 @@ document.addEventListener('keydown', (event) => {
 
     const dataObj = finalData[currentSlideIndex];
     const key = event.key.toLowerCase();
-    if (event.code.startsWith('Key') || event.code === 'Space') {
+    if ((event.key.length === 1 && /^[a-zA-Z]$/.test(event.key)) || event.code === 'Space') {
         if (!event.shiftKey && !event.ctrlKey) event.preventDefault();
         let bT = dataObj.btmText;
         dataObj.btmText = bT.slice(0, dataObj.currentChar) + key + bT.slice(dataObj.currentChar + 1);
