@@ -546,7 +546,7 @@ function DataBase64() {
 }
 
 function DataSmaller() {
-    let data = `puzzlepuzzlepuzzle${topText}.${btmText}.${symbolCount}.`;
+    let data = `puzzlepuzzlepuzzle${topText}.${btmText.toLowerCase()}.${symbolCount}.`;
     for (symbol of currySymbols) {
         data += `${symbol.name}.${Number(symbol.neg)}.${Number(symbol.squiggle)}.${Number(symbol.halo)}.${Number(symbol.tuna)}.${symbol.dots}.`;
     }
