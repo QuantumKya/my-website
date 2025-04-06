@@ -15,6 +15,8 @@ const alphabet = document.getElementById("alphabet");
 
 const container = document.getElementById("select-holder");
 
+const oldloadr = document.getElementById("oldfile");
+
 /*
 var customOn = false;
 customer.onchange = (event) => {
@@ -543,6 +545,65 @@ function DataBase64() {
     alert("Puzzle copied to clipboard!");
 }
 
+function DataSmaller() {
+    let data = `puzzlepuzzlepuzzle${topText}.${btmText}.${symbolCount}.`;
+    for (symbol of currySymbols) {
+        data += `${symbol.name}.${Number(symbol.neg)}.${Number(symbol.squiggle)}.${Number(symbol.halo)}.${Number(symbol.tuna)}.${symbol.dots}.`;
+    }
+    data += `${Number(dottedPuzzle)}.${Number(pixeled)}`;
+    navigator.clipboard.writeText(btoa(data));
+    alert("Puzzle copied to clipboard!");
+}
+
+function ParseSmaller(data) {
+    const decodedData = atob(data);
+    if (!decodedData.includes("puzzlepuzzlepuzzle")) {
+        console.error("Invalid data format: Missing 'puzzlepuzzlepuzzle' marker.");
+        return;
+    }
+
+    const text = decodedData.split("puzzlepuzzlepuzzle")[1];
+    if (!text) {
+        console.error("Invalid data format: No content after 'puzzlepuzzlepuzzle'.");
+        return;
+    }
+
+    let parts = text.split('.');
+    if (parts.length < 3) {
+        console.error("Invalid data format: Insufficient parts in the data.");
+        return;
+    }
+
+    topText = parts[0];
+    btmText = parts[1];
+    symbolCount = parseInt(parts[2]);
+    currySymbols = [];
+    let index = 3;
+    for (let i = 0; i < symbolCount; i++) {
+        currySymbols.push({
+            name: parts[index++],
+            neg: Boolean(parseInt(parts[index++])),
+            squiggle: Boolean(parseInt(parts[index++])),
+            halo: Boolean(parseInt(parts[index++])),
+            tuna: Boolean(parseInt(parts[index++])),
+            dots: parseInt(parts[index++])
+        });
+    }
+    dottedPuzzle = Boolean(parseInt(parts[index++]));
+    pixeled = Boolean(parseInt(parts[index++]));
+    dotter.checked = dottedPuzzle;
+    pixler.checked = pixeled;
+    setGlyphs();
+    for (let i = 0; i < symbolCount; i++) {
+        container.children[i].children[0].value = currySymbols[i].name;
+        container.children[i].children[1].children[0].checked = currySymbols[i].neg;
+        container.children[i].children[2].children[0].checked = currySymbols[i].squiggle;
+        container.children[i].children[3].children[0].checked = currySymbols[i].halo;
+        container.children[i].children[4].children[0].checked = currySymbols[i].tuna;
+        container.children[i].children[5].children[0].value = currySymbols[i].dots;
+    }
+}
+
 function LoadPuzzle(data) {
     let json = JSON.parse(atob(data));
     topText = json.clue;
@@ -562,6 +623,50 @@ function LoadPuzzle(data) {
         container.children[i].children[4].children[0].checked = currySymbols[i].tuna;
         container.children[i].children[5].children[0].value = currySymbols[i].dots;
     }
+}
+
+async function convertOldNew() {
+    if (!oldloadr.files || oldloadr.files.length === 0) {
+        alert("No file selected. Please select a file to convert.");
+        return;
+    }
+    const file = oldloadr.files[0];
+    const text = await file.text();
+    let olddata = text.trim().split('\n');
+    
+    for (let i = 0; i < olddata.length; i++) {
+        if (olddata[i].trim() === "") {
+            continue;
+        }
+        else if (!olddata[i].startsWith("eyJjbHV")) {
+            const index = olddata[i].indexOf("eyJjbHV");
+            if (index !== -1) {
+                const line = olddata[i].substring(index);
+                const linedata = JSON.parse(atob(line));
+                let newline = `puzzlepuzzlepuzzle${linedata.clue}.${linedata.answer}.${linedata.symbol}.`;
+                for (symbol of linedata.symbolArr) {
+                    newline += `${symbol.name}.${Number(symbol.neg)}.${Number(symbol.squiggle)}.${Number(symbol.halo)}.${Number(symbol.tuna)}.${symbol.dots}.`;
+                }
+                newline += `${Number(linedata.dotted)}.${Number(linedata.pixelMode)}`;
+                olddata[i] = olddata[i].replace(/eyJjbHV.*/, btoa(newline));
+            } else {
+                continue;
+            }
+        }
+
+        const linedata = JSON.parse(atob(olddata[i]));
+        let newline = `puzzlepuzzlepuzzle${linedata.clue}.${linedata.answer}.${linedata.symbol}.`;
+        for (symbol of linedata.symbolArr) {
+            newline += `${symbol.name}.${Number(symbol.neg)}.${Number(symbol.squiggle)}.${Number(symbol.halo)}.${Number(symbol.tuna)}.${symbol.dots}.`;
+        }
+        newline += `${Number(linedata.dotted)}.${Number(linedata.pixelMode)}`;
+        olddata[i] = olddata[i].replace(/eyJjbHV.*/, btoa(newline));
+    }
+    
+    const link = document.createElement("a");
+    link.download = "newpack.txt";
+    link.href = URL.createObjectURL(new Blob([olddata.join('\n')], { type: 'text/plain' }));
+    link.click();
 }
 
 function update() {

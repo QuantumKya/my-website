@@ -114,10 +114,19 @@
             </div>
             
             <div id="saveload" style="position: relative; top: -60px; left: 80px; text-wrap: wrap; width: 500px; display: flex; gap: 5px; flex-direction: row; height: 20px;">
-                <button onclick="DataBase64()" id="b64output" style="width: max-content; margin-right: 100px;">Copy Puzzle</button>
+                <button onclick="DataSmaller()" id="b64output" style="width: max-content; margin-right: 100px;">Copy Puzzle</button>
                 <input type="text" id="b64input" style="width: 200px;" placeholder="Base64 Puzzle Data">
-                <button onclick="LoadPuzzle(document.getElementById('b64input').value);" id="b64input" style="width: fit-content;">Load Puzzle</button>
+                <button onclick="ParseSmaller(document.getElementById('b64input').value);" id="b64input" style="width: fit-content;">Load Puzzle</button>
             </div>
+        </span>
+
+        <span style="position: relative; display: flex; flex-direction: column; bottom: 50px;">
+            <span style="margin-right: 40px;">Convert old format file to new:</span>
+            <span>
+                <label for="oldfile">Puzzle File</label>
+                <input type="file" id="oldfile">
+            </span>
+            <button onclick="document.fonts.ready.then(() => {convertOldNew()})" style="width: fit-content;">Convert</button>
         </span>
         
 

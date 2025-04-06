@@ -424,6 +424,100 @@ function LoadPuzzle64() {
     currentSlide.style.display = "block";
 }
 
+function ParseSmaller(data, target) {
+    const decodedData = atob(data);
+    if (!decodedData.includes("puzzlepuzzlepuzzle")) {
+        console.error("Invalid data format: Missing 'puzzlepuzzlepuzzle' marker.");
+        return;
+    }
+
+    const text = decodedData.split("puzzlepuzzlepuzzle")[1];
+    if (!text) {
+        console.error("Invalid data format: No content after 'puzzlepuzzlepuzzle'.");
+        return;
+    }
+
+    let parts = text.split('.');
+    if (parts.length < 3) {
+        console.error("Invalid data format: Insufficient parts in the data.");
+        return;
+    }
+
+    console.log(parts);
+
+    target.topText = parts[0];
+    target.ans = parts[1];
+    target.btmText = parts[1].replace(/[^\s]/g, '-');
+    console.log(parseInt(parts[2]));
+    target.symbolCount = parseInt(parts[2]);
+    target.curryArr = [];
+    let index = 3;
+    for (let i = 0; i < target.symbolCount; i++) {
+        target.curryArr.push({
+            name: parts[index++],
+            neg: Boolean(parseInt(parts[index++])),
+            squiggle: Boolean(parseInt(parts[index++])),
+            halo: Boolean(parseInt(parts[index++])),
+            tuna: Boolean(parseInt(parts[index++])),
+            dots: parseInt(parts[index++])
+        });
+    }
+    target.dottedPuzzle = Boolean(parseInt(parts[index++]));
+    target.pixeled = Boolean(parseInt(parts[index++]));
+}
+
+async function LoadSmaller64() {
+    singleMode = false;
+    currentSlideIndex = 0;
+    totalSlides = 0;
+    const file = fileLoader.files[0];
+    let text = await file.text();
+    let data = text.trim().split("\n"); // Trim and split by lines
+
+    let total = 0;
+
+    finalData = [];
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].trim() === "") {
+            data.splice(i, 1);
+            i--;
+            continue;
+        }
+        else if (!data[i].startsWith("cHV6emxlcHV6emxlcHV6emxl")) {
+            const index = data[i].indexOf("cHV6emxlcHV6emxlcHV6emxl");
+            if (index !== -1) {
+                data[i] = data[i].substring(index);
+            } else {
+                data.splice(i, 1);
+                i--;
+                continue;
+            }
+        }
+        total++;
+        finalData[i] = {
+            topText: "",
+            ans: "",
+            btmText: "",
+            symbolCount: 0,
+            curryArr: [],
+            dottedPuzzle: false,
+            pixeled: false,
+            solved: false,
+            currentChar: 0,
+        };
+        ParseSmaller(data[i], finalData[i]);
+        DrawAll();
+        const slide = new Image();
+        slide.src = canvas.toDataURL("image/png");
+        images[i] = slide.src;
+    }
+    totalSlides = total;
+
+    slideNumber.innerHTML = `${currentSlideIndex+1}/${totalSlides}`;
+    currentSlide.src = images[currentSlideIndex];
+    currentSlide.style.display = "block";
+}
+
 function updatePanel() {
     DrawAll();
     const updatedSlide = new Image();
