@@ -352,10 +352,27 @@ async function LoadPuzzleFile() {
     const file = fileLoader.files[0];
     let text = await file.text();
     let data = text.trim().split("\n"); // Trim and split by lines
-    totalSlides = data.length;
+
+    let total = 0;
 
     finalData = [];
     for (let i = 0; i < data.length; i++) {
+        if (data[i].trim() === "") {
+            data.splice(i, 1);
+            i--;
+            continue;
+        }
+        else if (!data[i].startsWith("eyJjbHV")) {
+            const index = data[i].indexOf("eyJjbHV");
+            if (index !== -1) {
+                data[i] = data[i].substring(index);
+            } else {
+                data.splice(i, 1);
+                i--;
+                continue;
+            }
+        }
+        total++;
         finalData[i] = {
             topText: "",
             ans: "",
@@ -373,6 +390,7 @@ async function LoadPuzzleFile() {
         slide.src = canvas.toDataURL("image/png");
         images[i] = slide.src;
     }
+    totalSlides = total;
 
     slideNumber.innerHTML = `${currentSlideIndex+1}/${totalSlides}`;
     currentSlide.src = images[currentSlideIndex];
@@ -432,6 +450,7 @@ document.addEventListener('keydown', (event) => {
     const dataObj = finalData[currentSlideIndex];
     const key = event.key.toLowerCase();
     if (event.code.startsWith('Key') || event.code === 'Space') {
+        if (!event.shiftKey && !event.ctrlKey) event.preventDefault();
         let bT = dataObj.btmText;
         dataObj.btmText = bT.slice(0, dataObj.currentChar) + key + bT.slice(dataObj.currentChar + 1);
         if (dataObj.currentChar < dataObj.ans.length - 1) dataObj.currentChar += 1;
@@ -447,8 +466,10 @@ document.addEventListener('keydown', (event) => {
     }
     else if (event.code === 'Backspace') {
         let bT = dataObj.btmText;
-        if (dataObj.currentChar >= 1 && bT[dataObj.currentChar] == '-') dataObj.currentChar -= 1;
-        dataObj.btmText = bT.slice(0, dataObj.currentChar) + '-' + bT.slice(dataObj.currentChar + 1);
+        if (dataObj.currentChar >= 1 && bT[dataObj.currentChar] == '-' || bT[dataObj.currentChar] == ' ') dataObj.currentChar -= 1;
+
+        if (dataObj.ans[dataObj.currentChar] == ' ') dataObj.btmText = bT.slice(0, dataObj.currentChar) + ' ' + bT.slice(dataObj.currentChar + 1);
+        else dataObj.btmText = bT.slice(0, dataObj.currentChar) + '-' + bT.slice(dataObj.currentChar + 1);
         if (dataObj.solved) {
             correctCount -= 1;
             dataObj.solved = false;
