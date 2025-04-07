@@ -172,6 +172,12 @@ function drawDots(count, i) {
             else if (j == 1) offset = -5;
             else if (j == 2) offset = 25;
         }
+        else if (count == 4) {
+            if (j == 0) offset = -45;
+            else if (j == 1) offset = -15;
+            else if (j == 2) offset = 15;
+            else if (j == 3) offset = 45;
+        }
         drawFuncD(4, 3, i, lingo2image, offset);
     }
 }
