@@ -81,13 +81,8 @@ html {
 #select-holder {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     width: fit-content;
-}
-
-#forms {
-    display: flex;
-    flex-direction: column;
-    width: 425px;
 }
 
 .symbol-custom {
@@ -101,20 +96,24 @@ html {
     flex-direction: horizontal;
 }
 
-#kansas {
-    position: relative;
-    left: 48px;
-    height: 500px;
-}
-
 #big-row {
     display: flex;
     flex-direction: row;
 }
 
+#forms {
+    display: flex;
+    flex-direction: column;
+    width: calc(375px + 5vw);
+}
+
+#canvas-holder {
+    width: 500px;
+}
+
 #info {
     position: relative;
-    left: 75px;
-    width: 450px;
+    left: 20px;
+    width: calc(90vw - 885px);
     text-wrap: wrap;
 }

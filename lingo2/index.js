@@ -17,6 +17,8 @@ const container = document.getElementById("select-holder");
 
 const oldloadr = document.getElementById("oldfile");
 
+const maxWidth = 425;
+
 /*
 var customOn = false;
 customer.onchange = (event) => {
@@ -747,14 +749,22 @@ function update() {
     ctx.fillStyle = "white";
 
     fontSize = 56;
-    if (topText.length > 12) fontSize = 54 - (topText.length - 12) * 2;
-    if (topText.length > 18) fontSize = 48 - Math.floor((topText.length - 12) * 1.5);
     ctx.font = `${fontSize}px Lingo`;
+    let textWidth = ctx.measureText(topText).width;
+    while (textWidth > maxWidth && fontSize > 0) {
+        fontSize--;
+        ctx.font = `${fontSize}px Lingo`;
+        textWidth = ctx.measureText(topText).width;
+    }
     ctx.fillText(topText, 250, 125);
 
     fontSize = 56;
-    if (btmText.length > 12) fontSize = 54 - (btmText.length - 12) * 2;
-    if (btmText.length > 18) fontSize = 48 - Math.floor((btmText.length - 12) * 1.5);
+    textWidth = ctx.measureText(btmText).width;
+    while (textWidth > maxWidth && fontSize > 0) {
+        fontSize--;
+        ctx.font = `${fontSize}px Lingo`;
+        textWidth = ctx.measureText(btmText).width;
+    }
     let str = "";
     for (let i = 0; i < btmText.length; i++) {
         if (btmText[i] == " ") str += " ";
