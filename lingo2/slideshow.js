@@ -65,9 +65,12 @@ setNames(
 );
 
 var sprWidth = 104;
+var dotHeight = 70;
 
 function getOffset(i) {
-    sprWidth = sprWidth;
+    sprWidth = 104;
+    dotHeight = 70;
+    symbolY = 225;
     const rdjt = -10;
     let offset = 0;
     if (symbolCount == 1) {
@@ -97,6 +100,7 @@ function getOffset(i) {
         const centerOffset = (symbolCount - 1) / 2;
         offset = (i - centerOffset) * (sprWidth + 5) + sprWidth / 4 + rdjt;
         symbolY = 225 + (symbolCount - 4) * 3;
+        dotHeight = 70 - (symbolCount - 4) * 10;
     }
     return offset;
 }
@@ -134,7 +138,7 @@ function drawFuncD(x, y, i, map, offset) {
         y * 8,
         8, 8,
         symbolX + getOffset(i, finalData[currentSlideIndex].symbolCount) + offset,
-        symbolY + 70,
+        symbolY + dotHeight,
         sprWidth, sprWidth
     );
 }
@@ -177,13 +181,13 @@ function drawDots(count, i) {
             offset = 0;
         }
         else if (count == 2) {
-            if (j == 0) offset = -25;
-            else if (j == 1) offset = 15;
+            if (j == 0) offset = -20;
+            else if (j == 1) offset = 20;
         }
         else if (count == 3) {
-            if (j == 0) offset = -35;
-            else if (j == 1) offset = -5;
-            else if (j == 2) offset = 25;
+            if (j == 0) offset = -30;
+            else if (j == 1) offset = 0;
+            else if (j == 2) offset = 30;
         }
         else if (count == 4) {
             if (j == 0) offset = -45;
@@ -191,6 +195,7 @@ function drawDots(count, i) {
             else if (j == 2) offset = 15;
             else if (j == 3) offset = 45;
         }
+        if (symbolCount > 4) offset *= 104 / ((symbolCount - 4 + 0.5) * sprWidth);
         drawFuncD(4, 3, i, lingo2image, offset);
     }
 }
