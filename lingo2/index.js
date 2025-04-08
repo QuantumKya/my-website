@@ -99,6 +99,14 @@ setNames(
     "katar", "parabox", "halo", "tuna", "cymbal", "quatrefoil", "linkbetweenwords", "poketoads", "golgiyoshi"
 );
 
+const symbolCustomMap = {
+    "katar": 'È',
+    "linkbetweenwords": 'É',
+    "cymbal": 'Ê',
+    "shell": 'Ë',
+    "quatrefoil": 'Ì'
+};
+
 var sprWidth = 104;
 var dotHeight = 70;
 
@@ -254,11 +262,16 @@ function symbolDraw(proc, index) {
 }
 
 function symbolProc(name, dots, extraC = '') {
-    let letter = Object.hasOwn(letterdict, name);
+    const letter = Object.hasOwn(letterdict, name);
+    const custom = Object.hasOwn(symbolCustomMap, name);
     let text = "";
     if (letter) {
         if (dots > 0) text = name.toUpperCase() + String.fromCharCode(787 + parseInt(dots)) + extraC;
         else text = name.toUpperCase() + extraC;
+    }
+    else if (custom) {
+        if (dots > 0) text = symbolCustomMap[name] + String.fromCharCode(787 + parseInt(dots)) + extraC;
+        else text = symbolCustomMap[name] + extraC;
     }
     else {
         if (dots > 0) text = symbolDict[name] + String.fromCharCode(787 + parseInt(dots)) + extraC;
@@ -267,18 +280,6 @@ function symbolProc(name, dots, extraC = '') {
     return {t: text, bumpR: (dots == 2) ? 27 : 0};
 }
 
-function symbolIcon(name, index, dots) {
-    symbolDraw(symbolProc(name, dots), index);
-}
-function symbolNegate(name, index, dots) {
-    symbolDraw(symbolProc(name, dots, String.fromCharCode(787)), index);
-}
-function symbolSquiggle(name, index, dots) {
-    symbolDraw(symbolProc(name, dots, String.fromCharCode(786)), index);
-}
-function symbolSquigation(name, index, dots) {
-    symbolDraw(symbolProc(name, dots, String.fromCharCode(786) + String.fromCharCode(787)), index);
-}
 
 var dottedPuzzle = false;
 dotter.onchange = (event) => {
@@ -742,21 +743,46 @@ function update() {
         }
         else {
             let dots = currySymbols[i].dots;
-            if (currySymbols[i].neg && currySymbols[i].squiggle) {
+            const symbol = currySymbols[i];
+            if (symbol.neg && symbol.squiggle) {
                 symbolY = 225;
-                symbolSquigation(currySymbols[i].name, i, dots);
+                symbolDraw(symbolProc(currySymbols[i].name, dots, String.fromCharCode(786) + String.fromCharCode(787)), i);
+            }
+            else if (symbol.neg && symbol.halo) {
+                symbolY = 225;
+                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(793) + String.fromCharCode(787)), i);
+            }
+            else if (symbol.neg && symbol.tuna) {
+                symbolY = 225;
+                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(792) + String.fromCharCode(787)), i);
             }
             else if (currySymbols[i].neg) {
                 symbolY = 225;
-                symbolNegate(currySymbols[i].name, i, dots);
+                symbolDraw(symbolProc(currySymbols[i].name, dots, String.fromCharCode(787)), i);
             }
-            else if (currySymbols[i].squiggle) {
+            else if (symbol.halo && symbol.squiggle) {
                 symbolY = 225;
-                symbolSquiggle(currySymbols[i].name, i, dots);
+                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(786) + String.fromCharCode(793)), i);
+            }
+            else if (symbol.halo && symbol.tuna) {
+                symbolY = 225;
+                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(792) + String.fromCharCode(793)), i);
+            }
+            else if (symbol.squiggle) {
+                symbolY = 225;
+                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(786)), i);
+            }
+            else if (symbol.halo) {
+                symbolY = 225;
+                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(793)), i);
+            }
+            else if (symbol.tuna) {
+                symbolY = 225;
+                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(792)), i);
             }
             else {
                 symbolY = 210;
-                symbolIcon(currySymbols[i].name, i, dots);
+                symbolDraw(symbolProc(symbol.name, dots), i);
             }
             symbolY = 210;
         }
