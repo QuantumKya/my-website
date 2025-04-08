@@ -117,3 +117,13 @@ html {
     width: calc(90vw - 885px);
     text-wrap: wrap;
 }
+
+@media (max-width: 1200px) {
+    #big-row {
+        flex-wrap: wrap;
+    }
+
+    #info {
+        width: 100vw;
+    }
+}

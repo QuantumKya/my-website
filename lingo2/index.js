@@ -99,9 +99,16 @@ setNames(
     "katar", "parabox", "halo", "tuna", "cymbal", "quatrefoil", "linkbetweenwords", "poketoads", "golgiyoshi"
 );
 
+var sprWidth = 104;
+var dotHeight = 70;
+
 function getOffset(i) {
+    sprWidth = 104;
+    dotHeight = 70;
+    symbolY = 225;
     const rdjt = -10;
-    var offset = 0;
+    let offset = 0;
+
     if (symbolCount == 1) {
         offset = rdjt;
     }
@@ -120,6 +127,17 @@ function getOffset(i) {
         else if (i == 2) offset = 50 + 5 + 2 + rdjt;
         else if (i == 3) offset = 150 + 15 + 6 + rdjt;
     }
+    else if (symbolCount > 4) {
+        let expectWidth = (sprWidth + 5) * symbolCount;
+        while (expectWidth > maxWidth && sprWidth > 8) {
+            sprWidth -= 8;
+            expectWidth = (sprWidth + 5) * symbolCount;
+        }
+        const centerOffset = (symbolCount - 1) / 2;
+        offset = (i - centerOffset) * (sprWidth + 5) + sprWidth / 4 + rdjt;
+        symbolY = 225 + (symbolCount - 4) * 3;
+        dotHeight = 70 - (symbolCount - 4) * 10;
+    }
     return offset;
 }
 
@@ -134,7 +152,7 @@ function drawFunc(x, y, i, map) {
         8, 8,
         symbolX + getOffset(i),
         symbolY,
-        104, 104
+        sprWidth, sprWidth
     );
 }
 function drawFuncO(x, y, i, map, offset) {
@@ -144,7 +162,7 @@ function drawFuncO(x, y, i, map, offset) {
         8, 8,
         symbolX + getOffset(i),
         symbolY + offset,
-        104, 104
+        sprWidth, sprWidth
     );
 }
 function drawFuncD(x, y, i, map, offset) {
@@ -153,8 +171,8 @@ function drawFuncD(x, y, i, map, offset) {
         y * 8,
         8, 8,
         symbolX + getOffset(i) + offset,
-        symbolY + 70,
-        104, 104
+        symbolY + dotHeight,
+        sprWidth, sprWidth
     );
 }
 
@@ -210,6 +228,7 @@ function drawDots(count, i) {
             else if (j == 2) offset = 15;
             else if (j == 3) offset = 45;
         }
+        if (symbolCount > 4) offset *= 104 / ((symbolCount - 4 + 0.5) * sprWidth);
         drawFuncD(4, 3, i, lingo2image, offset);
     }
 }
