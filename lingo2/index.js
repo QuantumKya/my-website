@@ -96,7 +96,7 @@ setNames(
 
     "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
 
-    "katar", "parabox", "halo", "tuna", "cymbal", "quatrefoil", "linkbetweenwords", "poketoads", "golgiyoshi"
+    "katar", "parabox", "halo", "tuna", "cymbal", "quatrefoil", "linkbetweenwords", "poketoads", "golgiyoshi", "shell"
 );
 
 const symbolCustomMap = {
@@ -104,7 +104,9 @@ const symbolCustomMap = {
     "linkbetweenwords": 'É',
     "cymbal": 'Ê',
     "shell": 'Ë',
-    "quatrefoil": 'Ì'
+    "quatrefoil": 'Ì',
+    "tuna": 'Í',
+    "halo": 'Î'
 };
 
 var sprWidth = 104;
