@@ -61,46 +61,57 @@ setNames(
 
     "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
 
-    "katar", "parabox", "halo", "tuna", "cymbal", "quatrefoil", "linkbetweenwords", "poketoads", "golgiyoshi"
+    "katar", "parabox", "halo", "tuna", "cymbal", "quatrefoil", "linkbetweenwords", "poketoads", "golgiyoshi", "shell"
 );
+
+const symbolCustomMap = {
+    "katar": 'È',
+    "linkbetweenwords": 'É',
+    "cymbal": 'Ê',
+    "shell": 'Ë',
+    "quatrefoil": 'Ì',
+    "tuna": 'Í',
+    "halo": 'Î'
+};
 
 var sprWidth = 104;
 var dotHeight = 70;
 
 function getOffset(i) {
+    const data = finalData[currentSlideIndex];
     sprWidth = 104;
     dotHeight = 70;
     symbolY = 225;
     const rdjt = -10;
     let offset = 0;
-    if (symbolCount == 1) {
+    if (data.symbolCount == 1) {
         offset = rdjt;
     }
-    else if (symbolCount == 2) {
+    else if (data.symbolCount == 2) {
         if (i == 0) offset = -50 - 5 - 2 + rdjt;
         else if (i == 1) offset = 50 + 5 + 2 + rdjt;
     }
-    else if (symbolCount == 3) {
+    else if (data.symbolCount == 3) {
         if (i == 0) offset = -100 - 10 - 4 + rdjt;
         else if (i == 1) offset = 0 + rdjt;
         else if (i == 2) offset = 100 + 10 + 4 + rdjt;
     }
-    else if (symbolCount == 4) {
+    else if (data.symbolCount == 4) {
         if (i == 0) offset = -150 - 15 - 6 + rdjt;
         else if (i == 1) offset = -50 - 5 - 2 + rdjt;
         else if (i == 2) offset = 50 + 5 + 2 + rdjt;
         else if (i == 3) offset = 150 + 15 + 6 + rdjt;
     }
-    else if (symbolCount > 4) {
-        let expectWidth = (sprWidth + 5) * symbolCount;
+    else if (data.symbolCount > 4) {
+        let expectWidth = (sprWidth + 5) * data.symbolCount;
         while (expectWidth > maxWidth && sprWidth > 8) {
             sprWidth -= 8;
-            expectWidth = (sprWidth + 5) * symbolCount;
+            expectWidth = (sprWidth + 5) * data.symbolCount;
         }
-        const centerOffset = (symbolCount - 1) / 2;
+        const centerOffset = (data.symbolCount - 1) / 2;
         offset = (i - centerOffset) * (sprWidth + 5) + sprWidth / 4 + rdjt;
-        symbolY = 225 + (symbolCount - 4) * 3;
-        dotHeight = 70 - (symbolCount - 4) * 10;
+        symbolY = 225 + (data.symbolCount - 4) * 3;
+        dotHeight = 70 - (data.symbolCount - 4) * 10;
     }
     return offset;
 }
@@ -175,6 +186,7 @@ function drawTuna(i) {
     drawFuncO(3, 0, i, customimage, -70);
 }
 function drawDots(count, i) {
+    const data = finalData[currentSlideIndex];
     for (let j = 0; j < count; j++) {
         let offset = 0;
         if (count == 1) {
@@ -195,7 +207,7 @@ function drawDots(count, i) {
             else if (j == 2) offset = 15;
             else if (j == 3) offset = 45;
         }
-        if (symbolCount > 4) offset *= 104 / ((symbolCount - 4 + 0.5) * sprWidth);
+        if (data.symbolCount > 4) offset *= 104 / ((data.symbolCount - 4 + 0.5) * sprWidth);
         drawFuncD(4, 3, i, lingo2image, offset);
     }
 }
@@ -213,39 +225,32 @@ function drawIcon(name, index) {
 }
 
 
-function symbolDraw(text, index) {
+function symbolDraw(proc, index) {
     ctx.fillStyle = "white";
     ctx.font = "132px Symbolingo";
     ctx.textAlign = "center";
-    ctx.fillText(text, symbolX + getOffset(index, finalData[currentSlideIndex].symbolCount) + 44, symbolY + 88);
+    ctx.fillText(proc.t, symbolX + getOffset(index) + 44 + proc.bumpR, symbolY + 88);
 }
 
 function symbolProc(name, dots, extraC = '') {
-    let letter = Object.hasOwn(letterdict, name);
+    const letter = Object.hasOwn(letterdict, name);
+    const custom = Object.hasOwn(symbolCustomMap, name);
     let text = "";
     if (letter) {
         if (dots > 0) text = name.toUpperCase() + String.fromCharCode(787 + parseInt(dots)) + extraC;
         else text = name.toUpperCase() + extraC;
     }
+    else if (custom) {
+        if (dots > 0) text = symbolCustomMap[name] + String.fromCharCode(787 + parseInt(dots)) + extraC;
+        else text = symbolCustomMap[name] + extraC;
+    }
     else {
         if (dots > 0) text = symbolDict[name] + String.fromCharCode(787 + parseInt(dots)) + extraC;
         else text = symbolDict[name] + extraC;
     }
-    return text;
+    return {t: text, bumpR: (dots == 2) ? 27 : 0};
 }
 
-function symbolIcon(name, index, dots) {
-    symbolDraw(symbolProc(name, dots), index);
-}
-function symbolNegate(name, index, dots) {
-    symbolDraw(symbolProc(name, dots, String.fromCharCode(787)), index);
-}
-function symbolSquiggle(name, index, dots) {
-    symbolDraw(symbolProc(name, dots, String.fromCharCode(786)), index);
-}
-function symbolSquigation(name, index, dots) {
-    symbolDraw(symbolProc(name, dots, String.fromCharCode(786) + String.fromCharCode(787)), index);
-}
 
 function LoadPuzzle(data, fullObj) {
     let json = JSON.parse(atob(data));
@@ -268,70 +273,96 @@ function DrawAll() {
     else ctx.fillStyle = "#138012";
     ctx.fillRect(25, 25, 450, 450);
     for (let i = 0; i < dataObj.curryArr.length; i++) {
+        const symbol = dataObj.curryArr[i];
+        const dots = symbol.dots;
         if (dataObj.pixeled) {
-            if (dataObj.curryArr[i].squiggle && dataObj.curryArr[i].neg) {
+            if (symbol.squiggle && symbol.neg) {
                 symbolY = 225;
                 drawNegative(i, 100);
             }
-            else if (dataObj.curryArr[i].tuna && dataObj.curryArr[i].neg) {
+            else if (symbol.tuna && symbol.neg) {
                 symbolY = 225;
                 drawNegative(i, 115);
             }
-            else if (dataObj.curryArr[i].halo && dataObj.curryArr[i].neg) {
+            else if (symbol.halo && symbol.neg) {
                 symbolY = 225;
                 drawNegative(i, 115);
                 drawHalo(i);
             }
-            else if (dataObj.curryArr[i].neg) {
+            else if (symbol.neg) {
                 symbolY = 225;
                 drawNegative(i, 85);
             }
-            else if (dataObj.curryArr[i].squiggle && dataObj.curryArr[i].halo) {
+            else if (symbol.squiggle && symbol.halo) {
                 symbolY = 225;
                 drawHalo(i, 100);
             }
-            else if (dataObj.curryArr[i].tuna && dataObj.curryArr[i].halo) {
+            else if (symbol.tuna && symbol.halo) {
                 symbolY = 225;
                 drawHalo(i, 115);
             }
-            else if (dataObj.curryArr[i].halo) {
+            else if (symbol.halo) {
                 symbolY = 225;
                 drawHalo(i);
             }
             else symbolY = 210;
-            if (dataObj.curryArr[i].squiggle) {
+            if (symbol.squiggle) {
                 symbolY = 225;
                 drawSquiggle(i);
             }
-            else if (dataObj.curryArr[i].tuna) {
+            else if (symbol.tuna) {
                 symbolY = 225;
                 drawTuna(i);
             }
-            drawDots(dataObj.curryArr[i].dots, i);
-            drawIcon(dataObj.curryArr[i].name, i);
+            drawDots(dots, i);
+            drawIcon(symbol.name, i);
             symbolY = 210;
         }
         else {
-            let dots = dataObj.curryArr[i].dots;
-            if (dataObj.curryArr[i].neg && dataObj.curryArr[i].squiggle) {
+            if (symbol.neg && symbol.squiggle) {
                 symbolY = 225;
-                symbolSquigation(dataObj.curryArr[i].name, i, dots);
+                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(786) + String.fromCharCode(787)), i);
             }
-            else if (dataObj.curryArr[i].neg) {
+            else if (symbol.neg && symbol.halo) {
                 symbolY = 225;
-                symbolNegate(dataObj.curryArr[i].name, i, dots);
+                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(793) + String.fromCharCode(787)), i);
             }
-            else if (dataObj.curryArr[i].squiggle) {
+            else if (symbol.neg && symbol.tuna) {
                 symbolY = 225;
-                symbolSquiggle(dataObj.curryArr[i].name, i, dots);
+                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(792) + String.fromCharCode(787)), i);
+            }
+            else if (symbol.neg) {
+                symbolY = 225;
+                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(787)), i);
+            }
+            else if (symbol.halo && symbol.squiggle) {
+                symbolY = 225;
+                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(786) + String.fromCharCode(793)), i);
+            }
+            else if (symbol.halo && symbol.tuna) {
+                symbolY = 225;
+                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(792) + String.fromCharCode(793)), i);
+            }
+            else if (symbol.squiggle) {
+                symbolY = 225;
+                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(786)), i);
+            }
+            else if (symbol.halo) {
+                symbolY = 225;
+                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(793)), i);
+            }
+            else if (symbol.tuna) {
+                symbolY = 225;
+                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(792)), i);
             }
             else {
                 symbolY = 210;
-                symbolIcon(dataObj.curryArr[i].name, i, dots);
+                symbolDraw(symbolProc(symbol.name, dots), i);
             }
             symbolY = 210;
         }
     }
+
 
     let fontSize = 56;
 
