@@ -13,6 +13,8 @@ const slideNumber = document.getElementById("slideindex");
 const correctNumber = document.getElementById("correctcount");
 const imageHolder = document.getElementById("imageholder");
 
+const maxWidth = 425;
+
 var lingo2dict = {};
 var customdict = {};
 var letterdict = {};
@@ -254,13 +256,15 @@ function symbolProc(name, dots, extraC = '') {
 
 function LoadPuzzle(data, fullObj) {
     let json = JSON.parse(atob(data));
-    fullObj.topText = json.clue;
+    fullObj.clue = json.clue.toLowerCase();
+    fullObj.topText = json.clue.replace(/[^\s]/g, '-');
     fullObj.ans = json.answer.toLowerCase();
     fullObj.btmText = json.answer.replace(/[^\s]/g, '-');
     fullObj.symbolCount = json.symbol;
     fullObj.curryArr = json.symbolArr;
     fullObj.dottedPuzzle = json.dotted;
     fullObj.pixeled = json.pixelMode;
+    fullObj.reversed = Object.hasOwn(json, "reversed") ? json.reversed : false;
     fullObj.solved = false;
     fullObj.currentChar = 0;
 }
@@ -370,21 +374,23 @@ function DrawAll() {
     ctx.fillStyle = "white";
 
     fontSize = 56;
-    if (dataObj.topText.length > 12) fontSize = 54 - (dataObj.topText.length - 12) * 2;
-    if (dataObj.topText.length > 18) fontSize = 48 - Math.floor((dataObj.topText.length - 12) * 1.5);
     ctx.font = `${fontSize}px Lingo`;
-    /*
-    if (chain) {
-        if (primary);
-        else dataObj.topText = dataObj.topText.replace(/[^\s]/g, '-');
+    let textWidth = ctx.measureText(dataObj.topText).width;
+    while (textWidth > maxWidth && fontSize > 0) {
+        fontSize--;
+        ctx.font = `${fontSize}px Lingo`;
+        textWidth = ctx.measureText(dataObj.topText).width;
     }
-    else;
-    */
+    let str = "";
     ctx.fillText(dataObj.topText, 250, 125);
 
     fontSize = 56;
-    if (dataObj.ans.length > 12) fontSize = 54 - (dataObj.ans.length - 12) * 2;
-    if (dataObj.ans.length > 18) fontSize = 48 - Math.floor((dataObj.ans.length - 12) * 1.5);
+    textWidth = ctx.measureText(dataObj.btmText).width;
+    while (textWidth > maxWidth && fontSize > 0) {
+        fontSize--;
+        ctx.font = `${fontSize}px Lingo`;
+        textWidth = ctx.measureText(dataObj.btmText).width;
+    }
     ctx.font = `${fontSize}px Lingo`;
     ctx.fillText(dataObj.btmText, 250, 425);
 
@@ -429,6 +435,7 @@ async function LoadPuzzleFile() {
         }
         total++;
         finalData[i] = {
+            clue: "",
             topText: "",
             ans: "",
             btmText: "",
@@ -437,6 +444,7 @@ async function LoadPuzzleFile() {
             dottedPuzzle: false,
             pixeled: false,
             solved: false,
+            reversed: false,
             currentChar: 0,
         };
         LoadPuzzle(data[i], finalData[i]);
@@ -449,33 +457,6 @@ async function LoadPuzzleFile() {
 
     slideNumber.innerHTML = `${currentSlideIndex+1}/${totalSlides}`;
     currentSlide.src = images[currentSlideIndex];
-    currentSlide.style.display = "block";
-}
-
-function LoadPuzzle64() {
-    singleMode = true;
-    currentSlideIndex = 0;
-    totalSlides = 1;
-    const b64 = base64text.value;
-    finalData[0] = {
-        topText: "",
-        ans: "",
-        btmText: "",
-        symbolCount: 0,
-        curryArr: [],
-        dottedPuzzle: false,
-        pixeled: false,
-        solved: false,
-        currentChar: 0
-    };
-    LoadPuzzle(b64, finalData[0]);
-    DrawAll(finalData[0]);
-    const slide = new Image();
-    slide.src = canvas.toDataURL("image/png");
-    images[0] = slide.src;
-
-    slideNumber.innerHTML = `${currentSlideIndex+1}/${totalSlides}`;
-    currentSlide.src = images[0];
     currentSlide.style.display = "block";
 }
 
@@ -501,13 +482,13 @@ async function FormatData() {
     link.click();
 }
 
-function LoadSmaller() {
+function LoadSmaller(data = base64text.value) {
     singleMode = true;
     currentSlideIndex = 0;
     totalSlides = 1;
     correctCount = 0;
-    const b64 = base64text.value;
     finalData[0] = {
+        clue: "",
         topText: "",
         ans: "",
         btmText: "",
@@ -516,9 +497,10 @@ function LoadSmaller() {
         dottedPuzzle: false,
         pixeled: false,
         solved: false,
-        currentChar: 0
+        reversed: false,
+        currentChar: 0,
     };
-    ParseSmaller(b64, finalData[0]);
+    ParseSmaller(data, finalData[0]);
     DrawAll(finalData[0]);
     const slide = new Image();
     slide.src = canvas.toDataURL("image/png");
@@ -548,9 +530,8 @@ function ParseSmaller(data, target) {
         return;
     }
 
-    target.topText = parts[0];
+    target.clue = parts[0]
     target.ans = parts[1];
-    target.btmText = parts[1].replace(/[^\s]/g, '-');
     target.symbolCount = parseInt(parts[2]);
     target.curryArr = [];
     let index = 3;
@@ -566,6 +547,10 @@ function ParseSmaller(data, target) {
     }
     target.dottedPuzzle = Boolean(parseInt(parts[index++]));
     target.pixeled = Boolean(parseInt(parts[index++]));
+
+    target.reversed = parts.length > index ? Boolean(parseInt(parts[index++])) : false;
+    target.topText = target.reversed ? parts[0].replace(/[^\s]/g, '-') : parts[0];
+    target.btmText = target.reversed ? parts[1] : parts[1].replace(/[^\s]/g, '-');
 }
 
 async function LoadSmaller64() {
@@ -598,6 +583,7 @@ async function LoadSmaller64() {
         }
         total++;
         finalData[i] = {
+            clue: "",
             topText: "",
             ans: "",
             btmText: "",
@@ -605,8 +591,9 @@ async function LoadSmaller64() {
             curryArr: [],
             dottedPuzzle: false,
             pixeled: false,
+            reversed: false,
             solved: false,
-            currentChar: 0,
+            currentChar: 0
         };
         ParseSmaller(data[i], finalData[i]);
         DrawAll();
@@ -631,6 +618,8 @@ function updatePanel() {
 var correctCount = 0;
 
 document.addEventListener('keydown', (event) => {
+    let targetText = finalData[currentSlideIndex].reversed ? finalData[currentSlideIndex].topText : finalData[currentSlideIndex].btmText;
+
     if (!singleMode) {
         if (event.code == 'ArrowRight') {
             currentSlideIndex += 1;
@@ -644,44 +633,54 @@ document.addEventListener('keydown', (event) => {
         }
     }
 
+
     const dataObj = finalData[currentSlideIndex];
     const key = event.key.toLowerCase();
+    let bT = dataObj.reversed ? dataObj.topText : dataObj.btmText;
+    const aT = dataObj.reversed ? dataObj.clue : dataObj.ans;
+
     if ((event.key.length === 1 && /^[a-zA-Z]$/.test(event.key)) || event.code === 'Space') {
         if (!event.shiftKey && !event.ctrlKey) event.preventDefault();
-        let bT = dataObj.btmText;
-        dataObj.btmText = bT.slice(0, dataObj.currentChar) + key + bT.slice(dataObj.currentChar + 1);
-        if (dataObj.currentChar < dataObj.ans.length - 1) dataObj.currentChar += 1;
-        if (dataObj.btmText == dataObj.ans && !dataObj.solved) {
+        targetText = bT.slice(0, dataObj.currentChar) + key + bT.slice(dataObj.currentChar + 1);
+        if (dataObj.currentChar < aT.length - 1) dataObj.currentChar += 1;
+        if (targetText == aT && !dataObj.solved) {
             dataObj.solved = true;
             correctCount += 1;
         }
+        else if (targetText == aT && dataObj.solved);
         else {
             if (dataObj.solved) correctCount -= 1;
             dataObj.solved = false;
         }
-        updatePanel();
     }
     else if (event.code === 'Backspace') {
-        let bT = dataObj.btmText;
         if (dataObj.currentChar >= 1 && bT[dataObj.currentChar] == '-' || bT[dataObj.currentChar] == ' ') dataObj.currentChar -= 1;
 
-        if (dataObj.ans[dataObj.currentChar] == ' ') dataObj.btmText = bT.slice(0, dataObj.currentChar) + ' ' + bT.slice(dataObj.currentChar + 1);
-        else dataObj.btmText = bT.slice(0, dataObj.currentChar) + '-' + bT.slice(dataObj.currentChar + 1);
+        if (aT[dataObj.currentChar] == ' ') targetText = bT.slice(0, dataObj.currentChar) + ' ' + bT.slice(dataObj.currentChar + 1);
+        else targetText = bT.slice(0, dataObj.currentChar) + '-' + bT.slice(dataObj.currentChar + 1);
         if (dataObj.solved) {
             correctCount -= 1;
             dataObj.solved = false;
         }
-        updatePanel();
     }
 
     if (event.code === 'CapsLock' || event.code =='Insert') {
-        dataObj.btmText = dataObj.ans[0] + dataObj.btmText.slice(1);
-        dataObj.currentChar = 1;
-        updatePanel();
+        targetText = aT[0] + targetText.slice(1);
+        if (aT.length > 1) dataObj.currentChar = 1;
     }
+
+    if (dataObj.reversed) finalData[currentSlideIndex].topText = targetText;
+    else finalData[currentSlideIndex].btmText = targetText;
+    updatePanel();
 
     slideNumber.innerHTML = `${currentSlideIndex+1}/${totalSlides}`;
     correctNumber.innerHTML = `Correct: ${correctCount}/${totalSlides}`;
     currentSlide.src = images[currentSlideIndex];
     currentSlide.style.display = "block";
 });
+
+
+window.onload = () => {
+    LoadSmaller("cHV6emxlcHV6emxlcHV6emxlaGkuaGkuMC4wLjA=");
+    updatePanel();
+};

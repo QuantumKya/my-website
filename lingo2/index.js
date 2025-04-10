@@ -5,6 +5,7 @@ const ansText = document.getElementById("anstext");
 const dotter = document.getElementById("dotter");
 //const customer = document.getElementById("customcheck");
 const pixler = document.getElementById("pixler");
+const reverser = document.getElementById("reverser");
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
@@ -31,12 +32,19 @@ pixler.onchange = (event) => {
     pixeled = event.target.checked;
 }
 
-document.onload = () => {
+var reversed = false;
+reverser.onchange = (event) => {
+    reversed = event.target.checked;
+}
+
+window.onload = () => {
     pixeled = true;
-    pixler.setAttribute("checked", true);
+    pixler.checked = true;
     dottedPuzzle = false;
-    dotter.setAttribute("checked", false);
-    symbolCount = 1;
+    dotter.checked = false;
+    reversed = false;
+    reverser.checked = false;
+    symbolCount = 0;
     numSelect.setAttribute("value", 1);
     
     topText = "clue";
@@ -46,7 +54,7 @@ document.onload = () => {
 }
 
 
-var symbolCount = 1;
+var symbolCount = 0;
 var lingo2dict = {};
 var customdict = {};
 var letterdict = {};
@@ -556,25 +564,12 @@ ansText.onchange = (event) => {
 };
 
 
-function DataBase64() {
-    let data = {
-        clue: topText,
-        answer: btmText,
-        symbol: symbolCount,
-        symbolArr: currySymbols,
-        dotted: dottedPuzzle,
-        pixelMode: pixeled
-    };
-    navigator.clipboard.writeText(btoa(JSON.stringify(data)));
-    alert("Puzzle copied to clipboard!");
-}
-
 function DataSmaller() {
     let data = `puzzlepuzzlepuzzle${topText}.${btmText.toLowerCase()}.${symbolCount}.`;
     for (symbol of currySymbols) {
         data += `${symbol.name}.${Number(symbol.neg)}.${Number(symbol.squiggle)}.${Number(symbol.halo)}.${Number(symbol.tuna)}.${symbol.dots}.`;
     }
-    data += `${Number(dottedPuzzle)}.${Number(pixeled)}`;
+    data += `${Number(dottedPuzzle)}.${Number(pixeled)}.${Number(reversed)}`;
     navigator.clipboard.writeText(btoa(data));
     alert("Puzzle copied to clipboard!");
 }
@@ -598,11 +593,11 @@ function ParseSmaller(data) {
         return;
     }
 
-    topText = parts[0];
-    btmText = parts[1];
-    symbolCount = parseInt(parts[2]);
+    let index = 0;
+    topText = parts[index++];
+    btmText = parts[index++];
+    symbolCount = parseInt(parts[index++]);
     currySymbols = [];
-    let index = 3;
     for (let i = 0; i < symbolCount; i++) {
         currySymbols.push({
             name: parts[index++],
@@ -615,29 +610,11 @@ function ParseSmaller(data) {
     }
     dottedPuzzle = Boolean(parseInt(parts[index++]));
     pixeled = Boolean(parseInt(parts[index++]));
+    if (parts.length >= index) reversed = Boolean(parseInt(parts[index++]));
+    else reversed = false;
     dotter.checked = dottedPuzzle;
     pixler.checked = pixeled;
-    setGlyphs();
-    for (let i = 0; i < symbolCount; i++) {
-        container.children[i].children[0].value = currySymbols[i].name;
-        container.children[i].children[1].children[0].checked = currySymbols[i].neg;
-        container.children[i].children[2].children[0].checked = currySymbols[i].squiggle;
-        container.children[i].children[3].children[0].checked = currySymbols[i].halo;
-        container.children[i].children[4].children[0].checked = currySymbols[i].tuna;
-        container.children[i].children[5].children[0].value = currySymbols[i].dots;
-    }
-}
-
-function LoadPuzzle(data) {
-    let json = JSON.parse(atob(data));
-    topText = json.clue;
-    btmText = json.answer;
-    symbolCount = json.symbol;
-    currySymbols = json.symbolArr;
-    dottedPuzzle = json.dotted;
-    dotter.checked = dottedPuzzle;
-    pixeled = json.pixelMode;
-    pixler.checked = pixeled;
+    reverser.checked = reversed;
     setGlyphs();
     for (let i = 0; i < symbolCount; i++) {
         container.children[i].children[0].value = currySymbols[i].name;
@@ -803,7 +780,13 @@ function update() {
         ctx.font = `${fontSize}px Lingo`;
         textWidth = ctx.measureText(topText).width;
     }
-    ctx.fillText(topText, 250, 125);
+    let str = "";
+    if (reversed) for (let i = 0; i < topText.length; i++) {
+        if (topText[i] == " ") str += " ";
+        else str += "-";
+    }
+    else str = topText;
+    ctx.fillText(str, 250, 125);
 
     fontSize = 56;
     textWidth = ctx.measureText(btmText).width;
@@ -812,11 +795,12 @@ function update() {
         ctx.font = `${fontSize}px Lingo`;
         textWidth = ctx.measureText(btmText).width;
     }
-    let str = "";
-    for (let i = 0; i < btmText.length; i++) {
+    str = "";
+    if (!reversed) for (let i = 0; i < btmText.length; i++) {
         if (btmText[i] == " ") str += " ";
         else str += "-";
     }
+    else str = btmText;
     ctx.font = `${fontSize}px Lingo`;
     ctx.fillText(str, 250, 425);
 
