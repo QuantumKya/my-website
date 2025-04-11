@@ -19,52 +19,55 @@ var lingo2dict = {};
 var customdict = {};
 var letterdict = {};
 var symbolDict = {};
-function setNames() {
+function setNames(a) {
     let newDict = {};
-    for (let i = 0; i < 24; i++) {
+    const b = a + 1;
+    for (let i = 0; i < b; i++) {
         let row = Math.floor(i / 5);
         let column = i % 5;
-        newDict[arguments[i]] = {x: column, y: row};
+        newDict[arguments[i+1]] = {x: column, y: row};
     }
     lingo2dict = newDict;
 
     newDict = {};
-    for (let i = 24; i < 50; i++) {
-        let row = Math.floor((i - 24) / 5);
-        let column = (i - 24) % 5;
-        newDict[arguments[i]] = {x: column, y: row};
+    for (let i = 0; i < 26; i++) {
+        let row = Math.floor(i / 5);
+        let column = i % 5;
+        newDict[arguments[i+b]] = {x: column, y: row};
     }
     letterdict = newDict;
 
     newDict = {};
-    for (let i = 50; i < arguments.length; i++) {
-        let row = Math.floor((i - 50) / 5);
-        let column = (i - 50) % 5;
-        newDict[arguments[i]] = {x: column, y: row};
+    for (let i = 0; i < arguments.length - (b+26); i++) {
+        let row = Math.floor(i / 5);
+        let column = (i) % 5;
+        newDict[arguments[i+b+26]] = {x: column, y: row};
     }
     customdict = newDict;
 
     newDict = {};
-    for (let i = 0; i < 24; i++) {
-        newDict[arguments[i]] = String.fromCharCode(97 + i);
+    for (let i = 0; i < b; i++) {
+        newDict[arguments[i+1]] = String.fromCharCode(97 + i);
     }
-    for (let i = 24; i < 50; i++) {
-        newDict[arguments[i]] = String.fromCharCode(65 + (i - 24));
+    for (let i = 0; i < 26; i++) {
+        newDict[arguments[i+b]] = String.fromCharCode(65 + i);
     }
     symbolDict = newDict;
 }
 
-setNames(
+setNames(25,
     "sundae", "gemini", "gears", "pyramid", "box",
     "quake", "saturn", "magenta", "cross", "starstruck",
     "nullset", "scramble", "speaker", "northernlights", "smiley",
     "ultrahand", "pinky", "pinkie (pie)", "questionmark",
-    "dot", "braket", "squiggle", "divider", "empty",
+    "dot", "braket", "squiggle", "divider", "walc", "empty",
 
     "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
 
     "katar", "parabox", "halo", "tuna", "cymbal", "quatrefoil", "linkbetweenwords", "poketoads", "golgiyoshi", "shell"
 );
+symbolDict["walc"] = "x";
+symbolDict["empty"] = "y";
 
 const symbolCustomMap = {
     "katar": 'È',
