@@ -618,8 +618,6 @@ function updatePanel() {
 var correctCount = 0;
 
 document.addEventListener('keydown', (event) => {
-    let targetText = finalData[currentSlideIndex].reversed ? finalData[currentSlideIndex].topText : finalData[currentSlideIndex].btmText;
-
     if (!singleMode) {
         if (event.code == 'ArrowRight') {
             currentSlideIndex += 1;
@@ -633,16 +631,19 @@ document.addEventListener('keydown', (event) => {
         }
     }
 
-
     const dataObj = finalData[currentSlideIndex];
+    let targetText = dataObj.reversed ? dataObj.topText : dataObj.btmText;
     const key = event.key.toLowerCase();
-    let bT = dataObj.reversed ? dataObj.topText : dataObj.btmText;
+    const bT = dataObj.reversed ? dataObj.topText : dataObj.btmText;
     const aT = dataObj.reversed ? dataObj.clue : dataObj.ans;
 
     if ((event.key.length === 1 && /^[a-zA-Z]$/.test(event.key)) || event.code === 'Space') {
         if (!event.shiftKey && !event.ctrlKey) event.preventDefault();
         targetText = bT.slice(0, dataObj.currentChar) + key + bT.slice(dataObj.currentChar + 1);
-        if (dataObj.currentChar < aT.length - 1) dataObj.currentChar += 1;
+        if (dataObj.currentChar < aT.length - 1) {
+            dataObj.currentChar += 1;
+        }
+
         if (targetText == aT && !dataObj.solved) {
             dataObj.solved = true;
             correctCount += 1;
@@ -664,13 +665,14 @@ document.addEventListener('keydown', (event) => {
         }
     }
 
-    if (event.code === 'CapsLock' || event.code =='Insert') {
+    if (event.code === 'CapsLock' || event.code == 'Insert') {
         targetText = aT[0] + targetText.slice(1);
         if (aT.length > 1) dataObj.currentChar = 1;
     }
 
-    if (dataObj.reversed) finalData[currentSlideIndex].topText = targetText;
-    else finalData[currentSlideIndex].btmText = targetText;
+    if (dataObj.reversed) dataObj.topText = targetText;
+    else dataObj.btmText = targetText;
+    finalData[currentSlideIndex] = dataObj;
     updatePanel();
 
     slideNumber.innerHTML = `${currentSlideIndex+1}/${totalSlides}`;
