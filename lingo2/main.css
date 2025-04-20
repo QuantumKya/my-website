@@ -8,6 +8,10 @@
     src: url("./LingoSymbol.ttf");
 }
 
+canvas {
+    font-family: 'Lingo';
+}
+
 html {
     overflow-x: hidden;
     font-family: Lingo;

@@ -7,7 +7,7 @@ const dotter = document.getElementById("dotter");
 const pixler = document.getElementById("pixler");
 const reverser = document.getElementById("reverser");
 
-const canvas = document.querySelector("canvas");
+const canvas = document.getElementById("kansas");
 const ctx = canvas.getContext("2d");
 ctx.imageSmoothingEnabled = false;
 const lingo2image = document.getElementById("lingo2icons");
@@ -105,7 +105,9 @@ setNames(25,
 
     "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
 
-    "katar", "parabox", "halo", "tuna", "cymbal", "quatrefoil", "linkbetweenwords", "poketoads", "golgiyoshi", "shell"
+    "katar", "parabox", "halo", "tuna", "cymbal",
+    "quatrefoil", "linkbetweenwords", "poketoads", "golgiyoshi", "shell",
+    "bitshiftL", "bitshiftR"
 );
 symbolDict["walc"] = "x";
 symbolDict["empty"] = "y";
@@ -814,7 +816,8 @@ function update() {
         ctx.closePath();
         ctx.fill();
     }
-    
+
+    console.log(canvas.id);
     requestAnimationFrame(update);
 }
 

@@ -64,7 +64,9 @@ setNames(25,
 
     "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
 
-    "katar", "parabox", "halo", "tuna", "cymbal", "quatrefoil", "linkbetweenwords", "poketoads", "golgiyoshi", "shell"
+    "katar", "parabox", "halo", "tuna", "cymbal",
+    "quatrefoil", "linkbetweenwords", "poketoads", "golgiyoshi", "shell",
+    "bitshiftL", "bitshiftR"
 );
 symbolDict["walc"] = "x";
 symbolDict["empty"] = "y";
