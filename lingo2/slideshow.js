@@ -232,13 +232,7 @@ function drawIcon(name, index) {
 }
 
 
-function symbolDraw(proc, index) {
-    ctx.fillStyle = "white";
-    ctx.font = "132px Symbolingo";
-    ctx.textAlign = "center";
-    ctx.fillText(proc.t, symbolX + getOffset(index) + 44 + proc.bumpR, symbolY + 88);
-}
-
+var symbolList = [];
 function symbolProc(name, dots, extraC = '') {
     const letter = Object.hasOwn(letterdict, name);
     const custom = Object.hasOwn(symbolCustomMap, name);
@@ -255,7 +249,7 @@ function symbolProc(name, dots, extraC = '') {
         if (dots > 0) text = symbolDict[name] + String.fromCharCode(787 + parseInt(dots)) + extraC;
         else text = symbolDict[name] + extraC;
     }
-    return {t: text, bumpR: (dots == 2) ? 27 : 0};
+    return text;
 }
 
 
@@ -275,6 +269,8 @@ function LoadPuzzle(data, fullObj) {
 }
 
 function DrawAll() {
+    let fontSize = 56;
+
     const dataObj = finalData[currentSlideIndex];
     ctx.fillStyle = "gray";
     ctx.fillRect(0, 0, 500, 500);
@@ -330,50 +326,61 @@ function DrawAll() {
         else {
             if (symbol.neg && symbol.squiggle) {
                 symbolY = 225;
-                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(786) + String.fromCharCode(787)), i);
+                symbolList[i] = symbolProc(symbol.name, dots, String.fromCharCode(786) + String.fromCharCode(787));
             }
             else if (symbol.neg && symbol.halo) {
                 symbolY = 225;
-                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(793) + String.fromCharCode(787)), i);
+                symbolList[i] = symbolProc(symbol.name, dots, String.fromCharCode(793) + String.fromCharCode(787));
             }
             else if (symbol.neg && symbol.tuna) {
                 symbolY = 225;
-                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(792) + String.fromCharCode(787)), i);
+                symbolList[i] = symbolProc(symbol.name, dots, String.fromCharCode(792) + String.fromCharCode(787));
             }
             else if (symbol.neg) {
                 symbolY = 225;
-                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(787)), i);
+                symbolList[i] = symbolProc(symbol.name, dots, String.fromCharCode(787));
             }
             else if (symbol.halo && symbol.squiggle) {
                 symbolY = 225;
-                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(786) + String.fromCharCode(793)), i);
+                symbolList[i] = symbolProc(symbol.name, dots, String.fromCharCode(786) + String.fromCharCode(793));
             }
             else if (symbol.halo && symbol.tuna) {
                 symbolY = 225;
-                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(792) + String.fromCharCode(793)), i);
+                symbolList[i] = symbolProc(symbol.name, dots, String.fromCharCode(792) + String.fromCharCode(793));
             }
             else if (symbol.squiggle) {
                 symbolY = 225;
-                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(786)), i);
+                symbolList[i] = symbolProc(symbol.name, dots, String.fromCharCode(786));
             }
             else if (symbol.halo) {
                 symbolY = 225;
-                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(793)), i);
+                symbolList[i] = symbolProc(symbol.name, dots, String.fromCharCode(793));
             }
             else if (symbol.tuna) {
                 symbolY = 225;
-                symbolDraw(symbolProc(symbol.name, dots, String.fromCharCode(792)), i);
+                symbolList[i] = symbolProc(symbol.name, dots, String.fromCharCode(792));
             }
             else {
                 symbolY = 210;
-                symbolDraw(symbolProc(symbol.name, dots), i);
+                symbolList[i] = symbolProc(symbol.name, dots);
             }
             symbolY = 210;
+
+            let symbolsFinal = symbolList.join('');
+
+            ctx.fillStyle = "white";
+            fontSize = 132;
+            ctx.font = `${fontSize}px Symbolingo`;
+            let textWidth = ctx.measureText(symbolsFinal).width;
+            while (textWidth > maxWidth && fontSize > 0) {
+                fontSize--;
+                ctx.font = `${fontSize}px Symbolingo`;
+                textWidth = ctx.measureText(symbolsFinal).width;
+            }
+            ctx.textAlign = "center";
+            ctx.fillText(symbolsFinal, canvas.width / 2, 300);
         }
     }
-
-
-    let fontSize = 56;
 
     ctx.textAlign = "center";
     ctx.fillStyle = "white";
