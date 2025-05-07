@@ -547,6 +547,7 @@ function removeGlyph(index) {
 */
 
 numSelect.onchange = (event) => {
+    symbolList = symbolList.slice(0, event.target.value);
     console.log(event.target.value);
     symbolCount = event.target.value;
     setGlyphs(true);
